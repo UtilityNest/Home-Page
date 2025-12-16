@@ -1,109 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Age Calculator – Date of Birth to Exact Age (India)</title>
-  <meta name="description" content="Free Age Calculator for India. Calculate exact age in years, months and days from date of birth. Useful for government exams and forms." />
-  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8">
+  <title>Age Calculator (Exact Age in Years, Months & Days)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free Age Calculator for government exams and official forms. Calculate exact age in years, months and days.">
 
   <style>
-    body{
-      margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:#f6f7fb; color:#222;
-    }
-    .container{
-      max-width:700px; margin:30px auto; padding:16px;
-    }
-    .card{
-      background:#fff; padding:20px; border-radius:14px;
-      box-shadow:0 8px 25px rgba(0,0,0,.1);
-    }
-    h1{font-size:1.5rem; margin-bottom:8px}
-    p{color:#555}
+    body{margin:0;font-family:Arial, sans-serif;background:#f6f7fb}
 
-    label{display:block; margin-top:14px; font-weight:600}
-    input{
-      width:100%; padding:10px; margin-top:6px;
-      border-radius:8px; border:1px solid #ccc; font-size:15px;
+    /* HEADER */
+    .site-header{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:12px 20px;background:#111827
     }
+    .site-header a{color:#fff;text-decoration:none;margin-right:14px;font-weight:600}
 
-    button{
-      margin-top:16px; padding:12px; width:100%;
-      border:none; border-radius:10px; background:#4f46e5;
-      color:#fff; font-size:16px; cursor:pointer;
-    }
+    /* BREADCRUMB */
+    .breadcrumb{padding:10px 20px;background:#f3f4f6;font-size:14px}
+    .breadcrumb a{text-decoration:none;color:#2563eb}
 
-    .result{
-      margin-top:20px; background:#f1f2f6; padding:16px; border-radius:10px;
-    }
-    .result h3{margin-top:0}
+    /* TOOL BOX */
+    .container{max-width:420px;margin:30px auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.1)}
+    h1{text-align:center;font-size:22px}
+    label{font-weight:600;margin-top:10px;display:block}
+    input,button{width:100%;padding:10px;margin-top:6px}
+    button{background:#4f46e5;color:#fff;border:none;border-radius:6px;cursor:pointer}
+    .result{margin-top:15px;font-weight:700;text-align:center}
 
-    footer{text-align:center; margin-top:16px; color:#666; font-size:13px}
+    /* CATEGORY BLOCK */
+    .tool-categories{text-align:center;margin:40px 20px}
+    .cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:15px}
+    .cat-grid a{padding:12px;border:1px solid #e5e7eb;border-radius:8px;text-decoration:none;font-weight:600;background:#f9fafb;color:#111827}
+
+    /* FOOTER */
+    .site-footer{background:#111827;color:#fff;padding:30px 20px}
+    .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+    .site-footer a{display:block;color:#d1d5db;text-decoration:none;margin:6px 0}
+    .copy{text-align:center;margin-top:20px;font-size:14px;color:#9ca3af}
   </style>
 </head>
 <body>
 
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo"><a href="../">India Tools Hub</a></div>
+  <nav>
+    <a href="../government-tools/">Government</a>
+    <a href="../finance-calculators/">Finance</a>
+    <a href="../student-tools/">Student</a>
+    <a href="../utility-tools/">Utility</a>
+    <a href="../hindi-tools/">Hindi</a>
+  </nav>
+</header>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb">
+  <a href="../">Home</a> ›
+  <a href="../government-tools/">Government Tools</a> ›
+  <span>Age Calculator</span>
+</nav>
+
+<!-- TOOL -->
 <div class="container">
-  <div class="card">
-    <h1>Age Calculator</h1>
-    <p>Calculate your exact age from date of birth. Useful for government exams and official forms.</p>
+  <h1>Age Calculator</h1>
 
-    <label>Date of Birth</label>
-    <input type="date" id="dob" />
+  <label>Date of Birth</label>
+  <input type="date" id="dob">
 
-    <label>Age as on Date</label>
-    <input type="date" id="asOn" />
+  <label>As on Date</label>
+  <input type="date" id="asOn">
 
-    <button onclick="calculateAge()">Calculate Age</button>
+  <button onclick="calcAge()">Calculate Age</button>
 
-    <div class="result" id="output" style="display:none">
-      <h3>Your Age</h3>
-      <p id="ageResult"></p>
-    </div>
-  </div>
-
-  <footer>
-    <p>100% Free • No Data Stored • Works Offline</p>
-  </footer>
+  <div class="result" id="result"></div>
 </div>
 
+<!-- CATEGORY LINKS -->
+<section class="tool-categories">
+  <h3>Explore More Tools</h3>
+  <div class="cat-grid">
+    <a href="../government-tools/">🏛 Government Tools</a>
+    <a href="../finance-calculators/">💰 Finance Calculators</a>
+    <a href="../student-tools/">🎓 Student Tools</a>
+    <a href="../utility-tools/">🛠 Utility Tools</a>
+    <a href="../hindi-tools/">🇮🇳 Hindi Tools</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <h4>Government Tools</h4>
+      <a href="../age-calculator/">Age Calculator</a>
+      <a href="../retirement-date-calculator/">Retirement Calculator</a>
+      <a href="../gratuity-calculator/">Gratuity Calculator</a>
+    </div>
+    <div>
+      <h4>Finance Calculators</h4>
+      <a href="../emi-calculator/">EMI Calculator</a>
+      <a href="../sip-calculator/">SIP Calculator</a>
+    </div>
+    <div>
+      <h4>Hindi Tools</h4>
+      <a href="../hindi-word-counter/">Hindi Word Counter</a>
+    </div>
+  </div>
+  <p class="copy">© 2025 India Tools Hub</p>
+</footer>
+
 <script>
-function calculateAge(){
-  const dob = document.getElementById('dob').value;
-  const asOn = document.getElementById('asOn').value || new Date().toISOString().split('T')[0];
+function calcAge(){
+  let dob = new Date(document.getElementById('dob').value);
+  let asOn = new Date(document.getElementById('asOn').value || new Date());
+  if(!dob){alert('Select Date of Birth');return}
 
-  if(!dob){
-    alert('Please select Date of Birth');
-    return;
-  }
+  let years = asOn.getFullYear() - dob.getFullYear();
+  let months = asOn.getMonth() - dob.getMonth();
+  let days = asOn.getDate() - dob.getDate();
 
-  const birthDate = new Date(dob);
-  const currentDate = new Date(asOn);
+  if(days < 0){months--; days += 30}
+  if(months < 0){years--; months += 12}
 
-  if(currentDate < birthDate){
-    alert('As on date cannot be before Date of Birth');
-    return;
-  }
-
-  let years = currentDate.getFullYear() - birthDate.getFullYear();
-  let months = currentDate.getMonth() - birthDate.getMonth();
-  let days = currentDate.getDate() - birthDate.getDate();
-
-  if(days < 0){
-    months--;
-    days += new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
-  }
-
-  if(months < 0){
-    years--;
-    months += 12;
-  }
-
-  document.getElementById('ageResult').innerText =
-    years + ' Years, ' + months + ' Months, ' + days + ' Days';
-
-  document.getElementById('output').style.display = 'block';
+  document.getElementById('result').innerHTML =
+    `Age: ${years} Years, ${months} Months, ${days} Days`;
 }
 </script>
 
