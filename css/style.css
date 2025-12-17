@@ -1,0 +1,84 @@
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* ===== HEADER ===== */
+header {
+  background: #0b5ed7;
+  padding: 14px 20px;
+}
+
+header a {
+  color: #fff;
+  text-decoration: none;
+  margin-right: 15px;
+  font-weight: bold;
+}
+
+/* ===== LAYOUT ===== */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.breadcrumb a {
+  color: #0b5ed7;
+  text-decoration: none;
+}
+
+/* ===== GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.card a {
+  color: #0b5ed7;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ===== ADS ===== */
+.ad {
+  background: #e9ecef;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 25px 0;
+  color: #555;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: #0b5ed7;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  margin-top: 40px;
+}
