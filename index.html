@@ -1,141 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> Utility Nest – Free Online Calculators & Utility Tools</title>
-  <meta name="description" content="Utility Nest offers free government, finance, student, Hindi language, and PDF utility tools. Fast, simple and mobile-friendly." />
-  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8">
+  <title>UtilityNest – Free Online Calculators & Utility Tools</title>
+  <meta name="description" content="UtilityNest offers free online calculators and utility tools for government exams, finance, students, Hindi typing and daily use.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- GitHub Pages BASE -->
+  <base href="/Home/">
+
+  <!-- SEO -->
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://utilitynest.github.io/Home/">
+
+  <!-- AdSense placeholder -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXX" crossorigin="anonymous"></script> -->
 
   <style>
-    body{
-      margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:#f6f7fb; color:#222;
-    }
-    header{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:14px 20px; background:#fff; box-shadow:0 2px 10px rgba(0,0,0,.08);
-    }
-    header h1{font-size:1.2rem; margin:0}
-    header input{
-      width:280px; max-width:60vw; padding:8px 12px; border-radius:8px;
-      border:1px solid #ddd;
-    }
+    body{margin:0;font-family:system-ui,Arial;background:#f6f7fb;color:#111}
+    a{text-decoration:none;color:#2563eb}
+    h1,h2,h3{margin:0 0 10px}
 
-    .layout{display:flex; max-width:1200px; margin:20px auto; gap:20px; padding:0 16px}
+    /* HEADER */
+    header{background:#111827;color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+    header a{color:#fff;font-weight:600;margin-right:15px}
 
-    aside{
-      width:230px; background:#fff; border-radius:12px; padding:12px;
-      box-shadow:0 6px 20px rgba(0,0,0,.08);
-    }
-    aside h3{font-size:1rem; margin:10px 0}
-    aside button{
-      width:100%; text-align:left; padding:8px 10px; margin:4px 0;
-      border:none; background:#f1f2f6; border-radius:8px; cursor:pointer;
-    }
-    aside button.active{background:#4f46e5; color:#fff}
+    /* HERO */
+    .hero{padding:40px 20px;text-align:center;background:#eef2ff}
+    .hero h1{font-size:28px}
+    .hero p{max-width:700px;margin:10px auto}
 
-    main{
-      flex:1; display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:16px;
-    }
+    /* CATEGORY GRID */
+    .section{padding:40px 20px;max-width:1200px;margin:auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+    .card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 5px 15px rgba(0,0,0,.08)}
+    .card a{font-weight:700;display:block;margin-top:10px}
 
-    .card{
-      background:#fff; padding:14px; border-radius:12px;
-      box-shadow:0 6px 20px rgba(0,0,0,.08);
-      transition:.2s; text-decoration:none; color:#222;
-    }
-    .card:hover{transform:translateY(-3px)}
-    .card h4{margin:0 0 6px; font-size:1rem}
-    .card small{color:#666}
+    /* ADS */
+    .ad-box{margin:30px auto;padding:20px;text-align:center;border:1px dashed #ccc;max-width:900px}
 
-    @media(max-width:900px){
-      .layout{flex-direction:column}
-      aside{width:100%}
-    }
+    /* FOOTER */
+    footer{background:#111827;color:#d1d5db;padding:30px 20px}
+    footer a{color:#d1d5db;display:block;margin:6px 0}
+    .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+    .copy{text-align:center;margin-top:20px;font-size:14px;color:#9ca3af}
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🇮🇳 Utility Nest</h1>
-  <input type="text" id="search" placeholder="Search tools (EMI, Hindi, PDF...)" onkeyup="filterTools()" />
+  <a href="">UtilityNest</a>
+  <nav>
+    <a href="government-tools/">Government</a>
+    <a href="finance-calculators/">Finance</a>
+    <a href="student-tools/">Student</a>
+    <a href="utility-tools/">Utility</a>
+    <a href="hindi-tools/">Hindi</a>
+  </nav>
 </header>
 
-<div class="layout">
+<section class="hero">
+  <h1>Free Online Calculators & Utility Tools</h1>
+  <p>Trusted tools for government exams, finance planning, students and daily calculations. Fast, accurate and mobile‑friendly.</p>
+</section>
 
-  <aside>
-    <h3>Categories</h3>
-    <button class="active" onclick="filterCategory('all')">All Tools</button>
-    <button onclick="filterCategory('govt')">Government / India</button>
-    <button onclick="filterCategory('finance')">Finance & Household</button>
-    <button onclick="filterCategory('student')">Student & Exam</button>
-    <button onclick="filterCategory('hindi')">Hindi / Language</button>
-    <button onclick="filterCategory('pdf')">PDF / Document</button>
-  </aside>
+<div class="ad-box">AdSense Banner (Top)</div>
 
-  <main id="tools">
+<section class="section">
+  <h2>Tool Categories</h2>
+  <div class="grid">
+    <div class="card">🏛 Government Tools
+      <a href="government-tools/">Explore</a>
+    </div>
+    <div class="card">💰 Finance Calculators
+      <a href="finance-calculators/">Explore</a>
+    </div>
+    <div class="card">🎓 Student Tools
+      <a href="student-tools/">Explore</a>
+    </div>
+    <div class="card">🛠 Utility Tools
+      <a href="utility-tools/">Explore</a>
+    </div>
+    <div class="card">🇮🇳 Hindi Tools
+      <a href="hindi-tools/">Explore</a>
+    </div>
+  </div>
+</section>
 
-    <a class="card govt" href="age-calculator/">
-      <h4>Age Calculator</h4>
-      <small>Government / India-Specific</small>
-    </a>
+<div class="ad-box">AdSense Banner (Middle)</div>
 
-    <a class="card govt" href="retirement-date-calculator/">
-      <h4>Retirement Date Calculator</h4>
-      <small>Government / India-Specific</small>
-    </a>
+<section class="section">
+  <h2>Popular Tools</h2>
+  <div class="grid">
+    <div class="card">Age Calculator<a href="age-calculator/">Open Tool</a></div>
+    <div class="card">EMI Calculator<a href="emi-calculator/">Open Tool</a></div>
+    <div class="card">Hindi Word Counter<a href="hindi-word-counter/">Open Tool</a></div>
+  </div>
+</section>
 
-    <a class="card govt" href="gratuity-calculator/">
-      <h4>Gratuity Calculator</h4>
-      <small>Government / India-Specific</small>
-    </a>
-
-    <a class="card govt" href="pension-calculator/">
-      <h4>Pension Calculator (Old / NPS)</h4>
-      <small>Government / India-Specific</small>
-    </a>
-
-    <a class="card govt" href="hindi-word-counter/">
-      <h4>Hindi Word Counter</h4>
-      <small>Hindi / Language Tool</small>
-    </a>
-
-    <a class="card finance" href="emi-calculator/">
-      <h4>EMI Calculator</h4>
-      <small>Finance & Household</small>
-    </a>
-
-    <a class="card finance" href="gst-calculator/">
-      <h4>GST Calculator</h4>
-      <small>Finance & Household</small>
-    </a>
-
-    <a class="card finance" href="electricity-bill-calculator/">
-      <h4>Electricity Bill Calculator</h4>
-      <small>Finance & Household</small>
-    </a>
-
-  </main>
-</div>
-
-<script>
-function filterCategory(cat){
-  document.querySelectorAll('aside button').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-
-  document.querySelectorAll('.card').forEach(card=>{
-    if(cat==='all') card.style.display='block';
-    else card.style.display = card.classList.contains(cat)?'block':'none';
-  });
-}
-
-function filterTools(){
-  const q = document.getElementById('search').value.toLowerCase();
-  document.querySelectorAll('.card').forEach(card=>{
-    card.style.display = card.innerText.toLowerCase().includes(q)?'block':'none';
-  });
-}
-</script>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h3>Categories</h3>
+      <a href="government-tools/">Government</a>
+      <a href="finance-calculators/">Finance</a>
+      <a href="student-tools/">Student</a>
+      <a href="utility-tools/">Utility</a>
+      <a href="hindi-tools/">Hindi</a>
+    </div>
+    <div>
+      <h3>Popular Tools</h3>
+      <a href="age-calculator/">Age Calculator</a>
+      <a href="emi-calculator/">EMI Calculator</a>
+      <a href="hindi-word-counter/">Hindi Word Counter</a>
+    </div>
+  </div>
+  <p class="copy">© 2025 UtilityNest · Free Online Tools</p>
+</footer>
 
 </body>
 </html>
