@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Hindi Typing Tool – Type English to Hindi | UtilityNest</title>
 
-  <meta name="description" content="Free Hindi Typing Tool to type Hindi using English keyboard. Accurate phonetic typing with correct Hindi words. Fast, secure and real-time.">
+  <meta name="description" content="Free Hindi Typing Tool to type Hindi using English keyboard. Accurate phonetic typing with correct Hindi words. Fast, secure and real-time. Similar to EasyHindiTyping.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <base href="/Home/">
 
@@ -20,6 +20,7 @@
       border:2px solid #d1d5db;
       border-radius:10px;
       resize:vertical;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     textarea:focus{
       outline:none;
@@ -41,45 +42,80 @@
       flex:1;
     }
 
-    /* Draggable suggestion box */
-    #letterSuggestions{
+    /* Suggestion wrapper - relative positioning for dropdown */
+    .suggestion-wrapper{
+      position:relative;
+      display:block;
+    }
+
+    /* Suggestion box dropdown */
+    #suggestionsBox{
       position:absolute;
-      top:260px;
-      left:40px;
-      width:260px;
+      top:100%;
+      left:0;
+      right:0;
+      margin-top:4px;
       background:#ffffff;
-      border:1px solid #d1d5db;
-      border-radius:6px;
-      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      border:1px solid #e5e7eb;
+      border-radius:8px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.08);
       display:none;
       z-index:1000;
-      max-height:260px;
+      max-height:220px;
       overflow-y:auto;
-      font-size:15px;
+      font-size:14px;
+      max-width:100%;
     }
-    #letterSuggestionsHeader{
-      padding:6px 10px;
-      cursor:move;
-      background:#1d4ed8;
-      color:#ffffff;
-      font-size:13px;
-      border-radius:6px 6px 0 0;
-      user-select:none;
-    }
-    .letter-suggestion-item{
-      padding:6px 10px;
+
+    .suggestion-item{
+      padding:10px 14px;
       cursor:pointer;
+      border-bottom:1px solid #f3f4f6;
       display:flex;
       justify-content:space-between;
-      gap:10px;
+      align-items:center;
+      transition:background 0.15s ease;
     }
-    .letter-suggestion-item span.roman{
-      color:#6b7280;
+
+    .suggestion-item:last-child{
+      border-bottom:none;
+    }
+
+    .suggestion-item:hover,
+    .suggestion-item.active{
+      background:#f0f9ff;
+      padding-left:16px;
+    }
+
+    .suggestion-item .hindi-text{
+      font-weight:500;
+      color:#1f2937;
+      margin-right:10px;
+      font-size:15px;
+      min-width:60px;
+    }
+
+    .suggestion-item .roman-text{
+      color:#9ca3af;
       font-size:13px;
+      text-align:right;
+      flex:1;
     }
-    .letter-suggestion-item:hover,
-    .letter-suggestion-item.active{
-      background:#e5f3ff;
+
+    /* Scrollbar styling for suggestions */
+    #suggestionsBox::-webkit-scrollbar{
+      width:6px;
+    }
+    #suggestionsBox::-webkit-scrollbar-track{
+      background:#f9fafb;
+      border-radius:4px;
+    }
+    #suggestionsBox::-webkit-scrollbar-thumb{
+      background:#d1d5db;
+      border-radius:4px;
+    }
+    #suggestionsBox::-webkit-scrollbar-thumb:hover{
+      background:#9ca3af;
     }
   </style>
 </head>
@@ -114,21 +150,26 @@
     <strong>English keyboard</strong> से
     <strong>सही हिंदी शब्द</strong> टाइप कर सकते हैं।
     जैसे ही आप टाइप करेंगे, टेक्स्ट अपने-आप
-    सही हिंदी में बदल जाएगा।
+    सही हिंदी में बदल जाएगा। आप सुझाए गए शब्दों में से भी चुन सकते हैं।
   </p>
 
   <!-- INPUT -->
   <div class="card gradient-card">
     <h2>Type in English</h2>
 
-    <textarea
-      id="englishInput"
-      placeholder="Type here (e.g. mera bharat mahan hai)"
-      oninput="handleInput(event)"
-      onkeydown="handleLetterSuggestionKeys(event)"></textarea>
+    <div class="suggestion-wrapper">
+      <textarea
+        id="englishInput"
+        placeholder="Type here (e.g. mera bharat mahan hai)"
+        oninput="handleInput(event)"
+        onkeydown="handleSuggestionKeys(event)"></textarea>
+
+      <div id="suggestionsBox"></div>
+    </div>
 
     <p class="hint">
-      Example: <strong>mera bharat mahan hai</strong> → मेरा भारत महान है।
+      Example: <strong>mera bharat mahan hai</strong> → मेरा भारत महान है। 
+      या <strong>namaste, shukriya, dhanyavaad</strong> जैसे शब्द भी लिखें।
     </p>
   </div>
 
@@ -155,7 +196,8 @@
       ब्लॉगर्स और हिंदी कंटेंट क्रिएटर्स के लिए
       बेहद उपयोगी है। यह टूल पूरी तरह
       ब्राउज़र में काम करता है और आपका
-      डेटा कहीं सेव नहीं करता।
+      डेटा कहीं सेव नहीं करता। EasyHindiTyping की तरह
+      स्मार्ट सुझाव और सटीक हिंदी लिप्यंतरण प्रदान करता है।
     </p>
   </div>
 
@@ -181,291 +223,280 @@
   <p class="copy">© 2025 UtilityNest</p>
 </footer>
 
-<!-- DRAGGABLE LETTER SUGGESTIONS BOX -->
-<div id="letterSuggestions">
-  <div id="letterSuggestionsHeader">Drag suggestions</div>
-  <div id="letterSuggestionsBody"></div>
-</div>
-
 <!-- SCRIPT -->
 <script>
-// ---------- FULL MAP + VOWELS ----------
+// ========== FULL PHONETIC MAP (Transliteration Database) ==========
 const FULL_MAP = {
+  // क (ka group)
   "ka":"क","kaa":"का","ki":"कि","kee":"की","ku":"कु","koo":"कू","ke":"के",
   "kai":"कै","ko":"को","kau":"कौ","kam":"कं","kah":"कः",
 
+  // ख (kha group)
   "kha":"ख","khaa":"खा","khi":"खि","khee":"खी","khu":"खु","khoo":"खू",
   "khe":"खे","khai":"खै","kho":"खो","khau":"खौ","kham":"खं","khah":"खः",
 
+  // ग (ga group)
   "ga":"ग","gaa":"गा","gi":"गि","gee":"गी","gu":"गु","goo":"गू",
   "ge":"गे","gai":"गै","go":"गो","gau":"गौ","gam":"गं","gah":"गः",
 
+  // घ (gha group)
   "gha":"घ","ghaa":"घा","ghi":"घि","ghee":"घी","ghu":"घु","ghoo":"घू",
   "ghe":"घे","ghai":"घै","gho":"घो","ghau":"घौ","gham":"घं","ghah":"घः",
 
+  // च (cha group)
   "cha":"च","chaa":"चा","chi":"चि","chee":"ची","chu":"चु","choo":"चू",
   "che":"चे","chai":"चै","cho":"चो","chau":"चौ","cham":"चं","chah":"चः",
 
+  // छ (chha group)
   "chha":"छ","chhaa":"छा","chhi":"छि","chhee":"छी","chhu":"छु","chhoo":"छू",
   "chhe":"छे","chhai":"छै","chho":"छो","chhou":"छौ","chham":"छं","chhah":"छः",
 
+  // ज (ja group)
   "ja":"ज","jaa":"जा","ji":"जि","jee":"जी","ju":"जु","joo":"जू",
   "je":"जे","jai":"जै","jo":"जो","jau":"जौ","jam":"जं","jah":"जः",
 
+  // झ (jha group)
   "jha":"झ","jhaa":"झा","jhi":"झि","jhee":"झी","jhu":"झु","jhoo":"झू",
   "jhe":"झे","jhai":"झै","jho":"झो","jhau":"झौ","jham":"झं","jhah":"झः",
 
+  // त्र (tra group)
   "tra":"त्र","traa":"त्रा","tri":"त्रि","tree":"त्री","tru":"त्रु","troo":"त्रू",
-  "tre":"त्रे","trai":"त्रै","tro":"त्रो","trau":"ञौ","tram":"ञं","trah":"ञः",
+  "tre":"त्रे","trai":"त्रै","tro":"त्रो","trau":"त्रौ","tram":"त्रं","trah":"त्रः",
 
+  // ट (ta retroflex group)
   "ta":"ट","taa":"टा","ti":"टि","tee":"टी","tu":"टु","too":"टू",
   "te":"टे","tai":"टै","to":"टो","tau":"टौ","tam":"टं","tah":"टः",
 
+  // ठ (tha retroflex group)
   "tha":"ठ","thaa":"ठा","thi":"ठि","thee":"ठी","thu":"ठु","thoo":"ठू",
   "the":"ठे","thai":"ठै","tho":"ठो","thau":"ठौ","tham":"ठं","thah":"ठः",
 
+  // ड (da retroflex group)
   "da":"ड","daa":"डा","di":"डि","dee":"डी","du":"डु","doo":"डू",
   "de":"डे","dai":"डै","do":"डो","dau":"डौ","dam":"डं","dah":"डः",
 
+  // ढ (dha retroflex group)
   "dha":"ढ","dhaa":"ढा","dhi":"ढि","dhee":"ढी","dhu":"ढु","dhoo":"ढू",
   "dhe":"ढे","dhai":"ढै","dhao":"ढो","dhau":"ढौ","dham":"ढं","dhah":"ढः",
 
+  // ण (na retroflex group)
   "na":"ण","naa":"णा","ni":"णि","nee":"णी","nu":"णु","noo":"णू",
   "ne":"णे","nai":"णै","no":"णो","nau":"णौ","nam":"णं","nah":"णः",
 
-  "t":"त","taa2":"ता","ti2":"ति","tee2":"ती","tu2":"तु","too2":"तू",
-  "te2":"ते","tai2":"तै","to2":"तो","tau2":"तौ","tam2":"तं","tah2":"तः",
+  // त (ta dental group)
+  "t":"त","t_a":"ता","t_i":"ति","t_ee":"ती","t_u":"तु","t_oo":"तू",
+  "t_e":"ते","t_ai":"तै","t_o":"तो","t_au":"तौ","t_am":"तं","t_ah":"तः",
 
-  "tha2":"थ","thaa2":"था","thi2":"थि","thee2":"थी","thu2":"थु","thoo2":"थू",
-  "the2":"थे","thai2":"थै","tho2":"थो","thau2":"थौ","tham2":"थं","thah2":"थः",
+  // थ (tha dental group)
+  "tha_":"थ","tha_a":"था","tha_i":"थि","tha_ee":"थी","tha_u":"थु","tha_oo":"थू",
+  "tha_e":"थे","tha_ai":"थै","tha_o":"थो","tha_au":"थौ","tha_am":"थं","tha_ah":"थः",
 
-  "d":"द","daa2":"दा","di2":"दि","dee2":"दी","du2":"दु","doo2":"दू",
-  "de2":"दे","dai2":"दै","do2":"दो","dau2":"दौ","dam2":"दं","dah2":"दः",
+  // द (da dental group)
+  "d_":"द","d_a":"दा","d_i":"दि","d_ee":"दी","d_u":"दु","d_oo":"दू",
+  "d_e":"दे","d_ai":"दै","d_o":"दो","d_au":"दौ","d_am":"दं","d_ah":"दः",
 
-  "Dha":"ध","dhaa2":"धा","dhi2":"धि","dhee2":"धी","dhu2":"धु","dhoo2":"धू",
-  "dhe2":"धे","dhai2":"धै","dho2":"धो","dhau2":"धौ","dham2":"धं","dhah2":"धः",
+  // ध (Dha dental group)
+  "dh":"ध","dh_a":"धा","dh_i":"धि","dh_ee":"धी","dh_u":"धु","dh_oo":"धू",
+  "dh_e":"धे","dh_ai":"धै","dh_o":"धो","dh_au":"धौ","dh_am":"धं","dh_ah":"धः",
 
-  "na2":"न","naa2":"ना","ni2":"नि","nee2":"नी","nu2":"नु","noo2":"नू",
-  "ne2":"ने","nai2":"नै","no2":"नो","nau2":"नौ","nam2":"नं","nah2":"नः",
+  // न (na dental group)
+  "n":"न","n_a":"ना","n_i":"नि","n_ee":"नी","n_u":"नु","n_oo":"नू",
+  "n_e":"ने","n_ai":"नै","n_o":"नो","n_au":"नौ","n_am":"नं","n_ah":"नः",
 
+  // प (pa group)
   "pa":"प","paa":"पा","pi":"पि","pee":"पी","pu":"पु","poo":"पू",
   "pe":"पे","pai":"पै","po":"पो","pau":"पौ","pam":"पं","pah":"पः",
 
+  // फ (pha group)
   "pha":"फ","phaa":"फा","phi":"फि","phee":"फी","phu":"फु","phoo":"फू",
   "phe":"फे","pahi":"फै","pho":"फो","phau":"फौ","pham":"फं","phah":"फः",
 
+  // ब (ba group)
   "ba":"ब","baa":"बा","bi":"बि","bee":"बी","bu":"बु","boo":"बू",
   "be":"बे","bai":"बै","bo":"बो","bau":"बौ","bam":"बं","bah":"बः",
 
+  // भ (bha group)
   "bha":"भ","bhaa":"भा","bhi":"भि","bhee":"भी","bhu":"भु","bhoo":"भू",
   "bhe":"भे","bhai":"भै","bho":"भो","bhau":"भौ","bham":"भं","bhah":"भः",
 
+  // म (ma group)
   "ma":"म","maa":"मा","mi":"मि","mee":"मी","mu":"मु","moo":"मू",
   "me":"मे","mai":"मै","mo":"मो","mau":"मौ","mam":"मं","mah":"मः",
 
+  // य (ya group)
   "ya":"य","yaa":"या","yi":"यि","yee":"यी","yu":"यु","yoo":"यू",
   "ye":"ये","yai":"यै","yo":"यो","yau":"यौ","yam":"यं","yah":"यः",
 
+  // र (ra group)
   "ra":"र","raa":"रा","ri":"रि","ree":"री","ru":"रु","roo":"रू",
   "re":"रे","rai":"रै","ro":"रो","rau":"रौ","ram":"रं","rah":"रः",
 
+  // ल (la group)
   "la":"ल","laa":"ला","li":"लि","lee":"ली","lu":"लु","loo":"लू",
   "le":"ले","lai":"लै","lo":"लो","lau":"लौ","lam":"लं","lah":"लः",
 
+  // व (va group)
   "va":"व","vaa":"वा","vi":"वि","vee":"वी","vu":"वु","voo":"वू",
   "ve":"वे","vai":"वै","vo":"वो","vau":"वौ","vam":"वं","vah":"वः",
+  "wa":"व","waa":"वा","wi":"वि","wee":"वी","wu":"वु","woo":"वू",
 
+  // श (sha group)
   "sha":"श","shaa":"शा","shi":"शि","shee":"शी","shu":"शु","shoo":"शू",
   "she":"शे","shai":"शै","sho":"शो","shau":"शौ","sham":"शं","shah":"शः",
 
+  // स (sa group)
   "sa":"स","saa":"सा","si":"सि","see":"सी","su":"सु","soo":"सू",
   "se":"से","sai":"सै","so":"सो","sau":"सौ","sam":"सं","sah":"सः",
 
+  // ह (ha group)
   "ha":"ह","haa":"हा","hi":"हि","hee":"ही","hu":"हु","hoo":"हू",
   "he":"हे","hai":"है","ho":"हो","hau":"हौ","ham":"हं","hah":"हः",
 
+  // ळ (lla group)
   "lla":"ळ","llaa":"ळा","lli":"ळि","llee":"ळी","llu":"ळु","lloo":"ळू",
   "lle":"ळे","llai":"ळै","llo":"ळो","llou":"ळौ","llam":"ळं","llah":"ळः",
 
+  // क्ष (ksha group)
   "ksha":"क्ष","kshaa":"क्षा","kshi":"क्षि","kshee":"क्षी","kshu":"क्षु","kshoo":"क्षू",
-  "kshe":"क्षे","kshai":"क्षै","ksho":"क्षो","kshau":"क्षौ","ksham":"क्षं","kshah":"क्षः",
+  "kshe":"क्षे","kshai":"क्षै","ksho":"क्षo","kshau":"क्षौ","ksham":"क्षं","kshah":"क्षः",
 
-  "dnya":"ज्ञ","dnyaa":"ज्ञा","Dnyi":"ज्ञि","Dnyee":"ज्ञी","dnyu":"ज्ञु","dnyoo":"ज्ञू",
-  "dnye":"ज्ञे","dnyai":"ज्ञै","dnyo":"ज्ञो","dnyau":"ज्ञौ","dnyam":"ज्ञं","dnyah":"ज्ञः"
+  // ज्ञ (dnya group)
+  "dnya":"ज्ञ","dnyaa":"ज्ञा","dnyi":"ज्ञि","dnyee":"ज्ञी","dnyu":"ज्ञु","dnyoo":"ज्ञू",
+  "dnye":"ज्ञे","dnyai":"ज्ञै","dnyo":"ज्ञo","dnyau":"ज्ञौ","dnyam":"ज्ञं","dnyah":"ज्ञः",
+  "gya":"ज्ञ","gyaa":"ज्ञा","gyi":"ज्ञि","gyee":"ज्ञी","gyu":"ज्ञु","gyoo":"ज्ञू",
+  "gye":"ज्ञे","gyai":"ज्ञै","gyo":"ज्ञo","gyau":"ज्ञौ","gyam":"ज्ञं","gyah":"ज्ञः"
 };
 
+// Standalone vowels (independent forms)
 const STANDALONE_VOWELS = {
   "a":"अ","aa":"आ","i":"इ","ee":"ई","u":"उ","oo":"ऊ",
   "e":"ए","ai":"ऐ","o":"ओ","au":"औ"
 };
 
-// ----- LETTER SUGGESTIONS (same as previous answer) -----
-const LETTER_SUGGESTIONS = {
-  "k":[
-    {dev:"क", roman:"ka"},
-    {dev:"क्", roman:"k (halant)"},
-    {dev:"कं", roman:"kam (anusvara)"},
-    {dev:"कँ", roman:"kã (chandrabindu)"},
-    {dev:"कः", roman:"kah (visarga)"}
-  ],
-  "g":[
-    {dev:"ग", roman:"ga"},
-    {dev:"ग्", roman:"g (halant)"},
-    {dev:"गं", roman:"gam (anusvara)"},
-    {dev:"गँ", roman:"gã (chandrabindu)"},
-    {dev:"गः", roman:"gah (visarga)"}
-  ],
-  "c":[
-    {dev:"च", roman:"ca/cha"},
-    {dev:"च्", roman:"c (halant)"},
-    {dev:"चं", roman:"cam (anusvara)"},
-    {dev:"चँ", roman:"cã (chandrabindu)"},
-    {dev:"चः", roman:"cah (visarga)"}
-  ],
-  "j":[
-    {dev:"ज", roman:"ja"},
-    {dev:"ज्", roman:"j (halant)"},
-    {dev:"जं", roman:"jam (anusvara)"},
-    {dev:"जँ", roman:"jã (chandrabindu)"},
-    {dev:"जः", roman:"jah (visarga)"}
-  ],
-  "t":[
-    {dev:"त", roman:"ta (dental)"},
-    {dev:"ट", roman:"Ta (retroflex)"},
-    {dev:"त्", roman:"t (halant)"},
-    {dev:"ट्", roman:"T (halant)"},
-    {dev:"तं", roman:"tam (anusvara)"},
-    {dev:"तँ", roman:"tã (chandrabindu)"},
-    {dev:"तः", roman:"tah (visarga)"}
-  ],
-  "d":[
-    {dev:"द", roman:"da (dental)"},
-    {dev:"ड", roman:"Da (retroflex)"},
-    {dev:"द्", roman:"d (halant)"},
-    {dev:"ड्", roman:"D (halant)"},
-    {dev:"दं", roman:"dam (anusvara)"},
-    {dev:"दँ", roman:"dã (chandrabindu)"},
-    {dev:"दः", roman:"dah (visarga)"}
-  ],
-  "n":[
-    {dev:"न", roman:"na (dental)"},
-    {dev:"ण", roman:"Na (retroflex)"},
-    {dev:"न्", roman:"n (halant)"},
-    {dev:"ण्", roman:"N (halant)"},
-    {dev:"ं", roman:"anusvara"},
-    {dev:"ँ", roman:"chandrabindu"},
-    {dev:"नं", roman:"nam (anusvara)"},
-    {dev:"नः", roman:"nah (visarga)"},
-    {dev:"n", roman:"keep n as roman"}
-  ],
-  "p":[
-    {dev:"प", roman:"pa"},
-    {dev:"प्", roman:"p (halant)"},
-    {dev:"पं", roman:"pam (anusvara)"},
-    {dev:"पँ", roman:"pã (chandrabindu)"},
-    {dev:"पः", roman:"pah (visarga)"}
-  ],
-  "b":[
-    {dev:"ब", roman:"ba"},
-    {dev:"भ", roman:"bha"},
-    {dev:"ब्", roman:"b (halant)"},
-    {dev:"भ्", roman:"bh (halant)"},
-    {dev:"बं", roman:"bam (anusvara)"},
-    {dev:"बँ", roman:"bã (chandrabindu)"},
-    {dev:"बः", roman:"bah (visarga)"}
-  ],
-  "m":[
-    {dev:"म", roman:"ma"},
-    {dev:"म्", roman:"m (halant)"},
-    {dev:"ं", roman:"anusvara"},
-    {dev:"ँ", roman:"chandrabindu"},
-    {dev:"मं", roman:"mam (anusvara)"},
-    {dev:"मः", roman:"mah (visarga)"}
-  ],
-  "y":[
-    {dev:"य", roman:"ya"},
-    {dev:"य्", roman:"y (halant)"},
-    {dev:"यं", roman:"yam (anusvara)"},
-    {dev:"यँ", roman:"yã (chandrabindu)"},
-    {dev:"यः", roman:"yah (visarga)"}
-  ],
-  "r":[
-    {dev:"र", roman:"ra"},
-    {dev:"र्", roman:"r (halant)"},
-    {dev:"रं", roman:"ram (anusvara)"},
-    {dev:"रँ", roman:"rã (chandrabindu)"},
-    {dev:"रः", roman:"rah (visarga)"}
-  ],
-  "l":[
-    {dev:"ल", roman:"la"},
-    {dev:"ळ", roman:"ḷa"},
-    {dev:"ल्", roman:"l (halant)"},
-    {dev:"ळ्", roman:"ḷ (halant)"},
-    {dev:"लं", roman:"lam (anusvara)"},
-    {dev:"लँ", roman:"lã (chandrabindu)"},
-    {dev:"लः", roman:"lah (visarga)"}
-  ],
-  "v":[
-    {dev:"व", roman:"va/wa"},
-    {dev:"व्", roman:"v (halant)"},
-    {dev:"वं", roman:"vam (anusvara)"},
-    {dev:"वँ", roman:"vã (chandrabindu)"},
-    {dev:"वः", roman:"vah (visarga)"}
-  ],
-  "s":[
-    {dev:"स", roman:"sa"},
-    {dev:"श", roman:"sha"},
-    {dev:"ष", roman:"Sha"},
-    {dev:"स्", roman:"s (halant)"},
-    {dev:"सं", roman:"sam (anusvara)"},
-    {dev:"सँ", roman:"sã (chandrabindu)"},
-    {dev:"सः", roman:"sah (visarga)"}
-  ],
-  "h":[
-    {dev:"ह", roman:"ha"},
-    {dev:"ः", roman:"visarga"},
-    {dev:"ह्", roman:"h (halant)"},
-    {dev:"हं", roman:"ham (anusvara)"},
-    {dev:"हँ", roman:"hã (chandrabindu)"}
-  ],
-  "x":[
-    {dev:"ं", roman:"anusvara"},
-    {dev:"ँ", roman:"chandrabindu"},
-    {dev:"ः", roman:"visarga"}
-  ],
-  "a":[
-    {dev:"अ", roman:"a"},
-    {dev:"आ", roman:"aa"},
-    {dev:"ा", roman:"aa matra"},
-    {dev:"ॅ", roman:"short a (optional)"}
-  ],
-  "i":[
-    {dev:"इ", roman:"i"},
-    {dev:"ई", roman:"ii"},
-    {dev:"ि", roman:"i matra"},
-    {dev:"ी", roman:"ii matra"}
-  ],
-  "u":[
-    {dev:"उ", roman:"u"},
-    {dev:"ऊ", roman:"uu"},
-    {dev:"ु", roman:"u matra"},
-    {dev:"ू", roman:"uu matra"}
-  ],
-  "e":[
-    {dev:"ए", roman:"e"},
-    {dev:"ऐ", roman:"ai"},
-    {dev:"े", roman:"e matra"},
-    {dev:"ै", roman:"ai matra"}
-  ],
-  "o":[
-    {dev:"ओ", roman:"o"},
-    {dev:"औ", roman:"au"},
-    {dev:"ो", roman:"o matra"},
-    {dev:"ौ", roman:"au matra"}
-  ]
-};
+// ========== WORD SUGGESTION DICTIONARY ==========
+// Common Hindi words with their roman spellings (for smart autocomplete)
+const SUGGEST_WORDS = [
+  // Greetings
+  {roman:"namaste", hindi:"नमस्ते"},
+  {roman:"shukriya", hindi:"शुक्रिया"},
+  {roman:"shukriyaa", hindi:"शुक्रिया"},
+  {roman:"dhanyavaad", hindi:"धन्यवाद"},
+  {roman:"swagat", hindi:"स्वागत"},
+  
+  // Common words
+  {roman:"mera", hindi:"मेरा"},
+  {roman:"meri", hindi:"मेरी"},
+  {roman:"aap", hindi:"आप"},
+  {roman:"aapka", hindi:"आपका"},
+  {roman:"aapki", hindi:"आपकी"},
+  {roman:"bharat", hindi:"भारत"},
+  {roman:"mahan", hindi:"महान"},
+  {roman:"hai", hindi:"है"},
+  {roman:"hain", hindi:"हैं"},
+  
+  // Government/Official
+  {roman:"sarkar", hindi:"सरकार"},
+  {roman:"sarkari", hindi:"सरकारी"},
+  {roman:"adhikari", hindi:"अधिकारी"},
+  {roman:"rajya", hindi:"राज्य"},
+  {roman:"rajasthan", hindi:"राजस्थान"},
+  {roman:"delhi", hindi:"दिल्ली"},
+  {roman:"mumbai", hindi:"मुंबई"},
+  {roman:"bangalore", hindi:"बेंगलुरु"},
+  {roman:"kolkata", hindi:"कोलकाता"},
+  {roman:"pune", hindi:"पुणे"},
+  
+  // Exams & Education
+  {roman:"pariksha", hindi:"परीक्षा"},
+  {roman:"parishrama", hindi:"परिश्रम"},
+  {roman:"safalta", hindi:"सफलता"},
+  {roman:"student", hindi:"छात्र"},
+  {roman:"chhatra", hindi:"छात्र"},
+  {roman:"shiksha", hindi:"शिक्षा"},
+  {roman:"padhai", hindi:"पढ़ाई"},
+  {roman:"seekhna", hindi:"सीखना"},
+  
+  // Government positions
+  {roman:"upyojana", hindi:"उपयोजना"},
+  {roman:"yojana", hindi:"योजना"},
+  {roman:"niyukti", hindi:"नियुक्ति"},
+  {roman:"niyam", hindi:"नियम"},
+  {roman:"kanoon", hindi:"कानून"},
+  
+  // Related words
+  {roman:"aaj", hindi:"आज"},
+  {roman:"kal", hindi:"कल"},
+  {roman:"samay", hindi:"समय"},
+  {roman:"din", hindi:"दिन"},
+  {roman:"raat", hindi:"रात"},
+  {roman:"subah", hindi:"सुबह"},
+  {roman:"sham", hindi:"शाम"},
+  {roman:"dopahar", hindi:"दोपहर"},
+  
+  // Numbers/Common
+  {roman:"ek", hindi:"एक"},
+  {roman:"do", hindi:"दो"},
+  {roman:"teen", hindi:"तीन"},
+  {roman:"char", hindi:"चार"},
+  {roman:"paanch", hindi:"पाँच"},
+  {roman:"chah", hindi:"छह"},
+  {roman:"saat", hindi:"सात"},
+  {roman:"aath", hindi:"आठ"},
+  {roman:"nau", hindi:"नौ"},
+  {roman:"das", hindi:"दस"},
+  
+  // More daily use
+  {roman:"kaise", hindi:"कैसे"},
+  {roman:"kaisa", hindi:"कैसा"},
+  {roman:"kya", hindi:"क्या"},
+  {roman:"kyun", hindi:"क्यों"},
+  {roman:"kahan", hindi:"कहाँ"},
+  {roman:"kaun", hindi:"कौन"},
+  {roman:"kaunsa", hindi:"कौन सा"},
+  {roman:"kab", hindi:"कब"},
+  {roman:"haan", hindi:"हाँ"},
+  {roman:"bilkul", hindi:"बिलकुल"},
+  {roman:"badhiya", hindi:"बढ़िया"},
+  {roman:"badhiyaa", hindi:"बढ़िया"},
+  {roman:"thik", hindi:"ठीक"},
+  {roman:"theek", hindi:"ठीक"},
+  {roman:"accha", hindi:"अच्छा"},
+  {roman:"achcha", hindi:"अच्छा"},
+  
+  // Positional/Direction
+  {roman:"aage", hindi:"आगे"},
+  {roman:"peeche", hindi:"पीछे"},
+  {roman:"oopar", hindi:"ऊपर"},
+  {roman:"neeche", hindi:"नीचे"},
+  {roman:"samne", hindi:"सामने"},
+  {roman:"pass", hindi:"पास"},
+  {roman:"door", hindi:"दूर"},
+  
+  // Emotions/Actions
+  {roman:"khushi", hindi:"खुशी"},
+  {roman:"dukh", hindi:"दुःख"},
+  {roman:"gussa", hindi:"गुस्सा"},
+  {roman:"dar", hindi:"डर"},
+  {roman:"pyar", hindi:"प्यार"},
+  {roman:"mohabbat", hindi:"मोहब्बत"},
+  
+  // More words
+  {roman:"uttarpradesh", hindi:"उत्तर प्रदेश"},
+  {roman:"madhyapradesh", hindi:"मध्य प्रदेश"},
+  {roman:"maharashtra", hindi:"महाराष्ट्र"},
+  {roman:"gujarati", hindi:"गुजराती"},
+  {roman:"gujarati", hindi:"गुजरात"},
+  {roman:"bihari", hindi:"बिहारी"},
+  {roman:"punjabi", hindi:"पंजाबी"},
+  {roman:"marathi", hindi:"मराठी"},
+  {roman:"tamil", hindi:"तमिल"},
+  {roman:"telugu", hindi:"तेलुगु"},
+  {roman:"kannada", hindi:"कन्नड़"},
+  {roman:"malayalam", hindi:"मलयालम"}
+];
 
-// ----- TRANSLITERATION -----
+// ========== TRANSLITERATION ENGINE ==========
+
 function matchToken(str, i){
   let maxLen = Math.min(5, str.length - i);
   for(let len = maxLen; len > 0; len--){
@@ -508,154 +539,137 @@ function convertToHindi(){
   document.getElementById("hindiOutput").value = result;
 }
 
-// ----- LETTER SUGGESTION LOGIC -----
-let letterSuggestionsList = [];
-let letterActiveIndex = -1;
+// ========== WORD SUGGESTION LOGIC ==========
 
-function getCurrentCharInfo(textarea){
+let currentSuggestions = [];
+let activeIndex = -1;
+
+function getCurrentWordInfo(textarea){
   const pos = textarea.selectionStart;
   const value = textarea.value;
-  const char = pos > 0 ? value[pos - 1] : "";
-  return {char, pos};
+  
+  // Find word boundaries (space-separated)
+  let start = pos - 1;
+  while(start >= 0 && !/\s/.test(value[start])) start--;
+  start++;
+  
+  let end = pos;
+  while(end < value.length && !/\s/.test(value[end])) end++;
+  
+  const word = value.substring(start, end);
+  return {word, start, end, pos};
 }
 
-function handleInput(e){
+function handleInput(event){
   convertToHindi();
-  showLetterSuggestions(e);
+  showSuggestions(event);
 }
 
-function showLetterSuggestions(e){
-  const ta = e.target;
-  const info = getCurrentCharInfo(ta);
-  const ch = info.char.toLowerCase();
-  const box = document.getElementById("letterSuggestions");
-  const body = document.getElementById("letterSuggestionsBody");
+function showSuggestions(event){
+  const ta = event.target;
+  const info = getCurrentWordInfo(ta);
+  const word = info.word.toLowerCase();
+  const box = document.getElementById("suggestionsBox");
 
-  body.innerHTML = "";
+  box.innerHTML = "";
   box.style.display = "none";
-  letterSuggestionsList = [];
-  letterActiveIndex = -1;
+  currentSuggestions = [];
+  activeIndex = -1;
 
-  if(!ch || !LETTER_SUGGESTIONS[ch]) return;
+  // Only show suggestions if word length >= 2
+  if(!word || word.length < 2) return;
 
-  const options = LETTER_SUGGESTIONS[ch];
-  options.forEach(opt => {
+  // Find matching suggestions (startsWith or includes)
+  const matches = SUGGEST_WORDS
+    .filter(item => item.roman.startsWith(word) || item.roman.includes(word))
+    .slice(0, 5); // top 5 matches
+
+  if(matches.length === 0) return;
+
+  // Build suggestion items
+  matches.forEach((item, idx) => {
     const div = document.createElement("div");
-    div.className = "letter-suggestion-item";
+    div.className = "suggestion-item";
 
-    const devSpan = document.createElement("span");
-    devSpan.textContent = opt.dev;
+    const hindiSpan = document.createElement("span");
+    hindiSpan.className = "hindi-text";
+    hindiSpan.textContent = item.hindi;
 
     const romanSpan = document.createElement("span");
-    romanSpan.className = "roman";
-    romanSpan.textContent = opt.roman;
+    romanSpan.className = "roman-text";
+    romanSpan.textContent = item.roman;
 
-    div.appendChild(devSpan);
+    div.appendChild(hindiSpan);
     div.appendChild(romanSpan);
 
-    div.addEventListener("mousedown", function(ev){
-      ev.preventDefault();
-      applyLetterSuggestion(opt.dev, ch);
+    div.addEventListener("mousedown", function(e){
+      e.preventDefault();
+      applySuggestion(item.roman, info.start, info.end);
     });
 
-    body.appendChild(div);
+    box.appendChild(div);
   });
 
-  letterSuggestionsList = options;
+  currentSuggestions = matches;
   box.style.display = "block";
 }
 
-// IMPORTANT: change only Hindi output, keep English input as typed
-function applyLetterSuggestion(devChar, romanChar){
+function applySuggestion(word, wordStart, wordEnd){
   const ta = document.getElementById("englishInput");
-  const pos = ta.selectionStart;
-  const out = document.getElementById("hindiOutput");
-  const currentHindi = out.value;
+  const value = ta.value;
 
-  // replace at same cursor index in Hindi output
-  const beforeHindi = currentHindi.substring(0, pos - 1);
-  const afterHindi  = currentHindi.substring(pos);
+  // Replace word at position
+  const before = value.substring(0, wordStart);
+  const after  = value.substring(wordEnd);
+  ta.value = before + word + after;
 
-  out.value = beforeHindi + devChar + afterHindi;
+  // Move cursor to end of inserted word
+  const newPos = before.length + word.length;
+  ta.selectionStart = ta.selectionEnd = newPos;
 
-  // keep caret position in english input
-  ta.selectionStart = ta.selectionEnd = pos;
+  // Re-transliterate
+  convertToHindi();
 
-  document.getElementById("letterSuggestions").style.display = "none";
+  // Hide suggestions
+  document.getElementById("suggestionsBox").style.display = "none";
 }
 
-function handleLetterSuggestionKeys(e){
-  const box = document.getElementById("letterSuggestions");
+function handleSuggestionKeys(event){
+  const box = document.getElementById("suggestionsBox");
   if(box.style.display === "none") return;
 
-  const items = box.querySelectorAll(".letter-suggestion-item");
+  const items = box.querySelectorAll(".suggestion-item");
   if(items.length === 0) return;
 
-  if(e.key === "ArrowDown"){
-    e.preventDefault();
-    letterActiveIndex = (letterActiveIndex + 1) % items.length;
-  }else if(e.key === "ArrowUp"){
-    e.preventDefault();
-    letterActiveIndex = (letterActiveIndex - 1 + items.length) % items.length;
-  }else if(e.key === "Enter"){
-    if(letterActiveIndex >= 0){
-      e.preventDefault();
-      const chosen = letterSuggestionsList[letterActiveIndex];
-      const lastChar = getCurrentCharInfo(document.getElementById("englishInput")).char.toLowerCase();
-      applyLetterSuggestion(chosen.dev, lastChar);
+  if(event.key === "ArrowDown"){
+    event.preventDefault();
+    activeIndex = (activeIndex + 1) % items.length;
+  }else if(event.key === "ArrowUp"){
+    event.preventDefault();
+    activeIndex = (activeIndex - 1 + items.length) % items.length;
+  }else if(event.key === "Enter"){
+    if(activeIndex >= 0){
+      event.preventDefault();
+      const chosen = currentSuggestions[activeIndex];
+      const info = getCurrentWordInfo(event.target);
+      applySuggestion(chosen.roman, info.start, info.end);
       return;
     }
-  }else if(e.key === "Escape"){
+  }else if(event.key === "Escape"){
+    event.preventDefault();
     box.style.display = "none";
     return;
   }else{
     return;
   }
 
+  // Update active item styling
   items.forEach(el => el.classList.remove("active"));
-  if(letterActiveIndex >= 0) items[letterActiveIndex].classList.add("active");
+  if(activeIndex >= 0) items[activeIndex].classList.add("active");
 }
 
-// ----- DRAGGABLE BOX (W3Schools style) -----
-dragElement(document.getElementById("letterSuggestions")); // [web:66]
+// ========== UTILITY FUNCTIONS ==========
 
-function dragElement(elmnt){
-  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  const header = document.getElementById(elmnt.id + "Header");
-
-  if(header){
-    header.onmousedown = dragMouseDown;
-  }else{
-    elmnt.onmousedown = dragMouseDown;
-  }
-
-  function dragMouseDown(e){
-    e = e || window.event;
-    e.preventDefault();
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e){
-    e = e || window.event;
-    e.preventDefault();
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    elmnt.style.top  = (elmnt.offsetTop  - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDragElement(){
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
-
-// ----- COPY & CLEAR -----
 function copyHindi(){
   const out = document.getElementById("hindiOutput");
   out.select();
@@ -666,7 +680,7 @@ function copyHindi(){
 function clearText(){
   document.getElementById("englishInput").value = "";
   document.getElementById("hindiOutput").value = "";
-  document.getElementById("letterSuggestions").style.display = "none";
+  document.getElementById("suggestionsBox").style.display = "none";
 }
 </script>
 
