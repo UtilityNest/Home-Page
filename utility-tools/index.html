@@ -21,4 +21,91 @@
     .breadcrumb a{color:#2563eb}
 
     /* SECTION */
-    .section{max-width:1200px;margin:auto;padding
+    .section{max-width:1200px;margin:auto;padding:40px 20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+    .card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 5px 15px rgba(0,0,0,.08)}
+    .card h3{margin-bottom:10px}
+
+    /* ADS */
+    .ad-box{margin:30px auto;padding:20px;text-align:center;border:1px dashed #ccc;max-width:900px}
+
+    /* FOOTER */
+    footer{background:#111827;color:#d1d5db;padding:30px 20px}
+    footer a{color:#d1d5db;display:block;margin:6px 0}
+    .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+    .copy{text-align:center;margin-top:20px;font-size:14px;color:#9ca3af}
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="">UtilityNest</a>
+  <nav>
+    <a href="government-tools/">Government</a>
+    <a href="finance-calculators/">Finance</a>
+    <a href="student-tools/">Student</a>
+    <a href="utility-tools/">Utility</a>
+    <a href="hindi-tools/">Hindi</a>
+  </nav>
+</header>
+
+<nav class="breadcrumb">
+  <a href="">Home</a> › <strong>Utility Tools</strong>
+</nav>
+
+<div class="ad-box">AdSense Banner (Top)</div>
+
+<section class="section">
+  <h1>Utility Tools</h1>
+  <p>Everyday calculators and converters to simplify your daily tasks and quick calculations.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Date Difference Calculator</h3>
+      <p>Find the exact number of days, months, or years between two dates.</p>
+      <a href="date-difference-calculator/">Open Tool →</a>
+    </div>
+
+    <div class="card">
+      <h3>Unit Converter</h3>
+      <p>Convert units for length, weight, temperature, and more in seconds.</p>
+      <a href="unit-converter/">Open Tool →</a>
+    </div>
+
+    <div class="card">
+      <h3>Time Calculator</h3>
+      <p>Add, subtract, or compare time values with ease.</p>
+      <a href="time-calculator/">Open Tool →</a>
+    </div>
+
+    <div class="card">
+      <h3>Number to Words Converter</h3>
+      <p>Instantly convert numbers into words for documents and forms.</p>
+      <a href="number-to-words/">Open Tool →</a>
+    </div>
+  </div>
+</section>
+
+<div class="ad-box">AdSense Banner (Middle)</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h3>Categories</h3>
+      <a href="government-tools/">Government</a>
+      <a href="finance-calculators/">Finance</a>
+      <a href="student-tools/">Student</a>
+      <a href="utility-tools/">Utility</a>
+      <a href="hindi-tools/">Hindi</a>
+    </div>
+    <div>
+      <h3>Popular Tools</h3>
+      <a href="age-calculator/">Age Calculator</a>
+      <a href="emi-calculator/">EMI Calculator</a>
+    </div>
+  </div>
+  <p class="copy">© 2025 UtilityNest</p>
+</footer>
+
+</body>
+</html>
