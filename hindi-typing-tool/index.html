@@ -141,7 +141,6 @@
 
 <!-- ADVANCED PHONETIC TRANSLITERATION SCRIPT -->
 <script>
-// --- CORE MAPPING FROM YOUR BRACKET LIST ---
 
 // Full-token mapping: roman -> Devanagari
 // Includes all independent forms and vowel-mātrā forms you supplied.
@@ -284,6 +283,18 @@ const FULL_MAP = {
   "dnye":"ज्ञे","dnyai":"ज्ञै","dnyo":"ज्ञो","dnyau":"ज्ञौ","dnyam":"ज्ञं","dnyah":"ज्ञः"
 };
 
+ const consonants = {
+  "k":"क","kh":"ख","g":"ग","gh":"घ","ch":"च","chh":"छ",
+  "j":"ज","jh":"झ","t":"त","th":"थ","d":"द","dh":"ध",
+  "n":"न","p":"प","ph":"फ","b":"ब","bh":"भ","m":"म",
+  "y":"य","r":"र","l":"ल","v":"व","s":"स","sh":"श","h":"ह"
+};
+
+const vowels = {
+  "aa":"ा","i":"ि","ii":"ी","u":"ु","uu":"ू",
+  "e":"े","ai":"ै","o":"ो","au":"ौ"
+};
+ 
 // Basic vowels (independent)
 const STANDALONE_VOWELS = {
   "a":"अ","aa":"आ","i":"इ","ee":"ई","u":"उ","oo":"ऊ",
