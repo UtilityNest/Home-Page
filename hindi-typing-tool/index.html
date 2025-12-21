@@ -1,248 +1,253 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<title>Hindi Typing Tool – UtilityNest</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Hindi Typing Tool – Type English to Hindi | UtilityNest</title>
 
-<!-- QUILL CORE -->
-<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <meta name="description" content="Free Hindi Typing Tool to type Hindi using English keyboard. Accurate phonetic typing with correct Hindi words. Fast, secure and real-time.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/Home/">
 
-<!-- QUILL INDIC INPUT (TRANSLITERATION) -->
-<script src="https://cdn.jsdelivr.net/npm/quill-input@1.1.7/dist/quill-input.min.js"></script>
+  <!-- GLOBAL CSS -->
+  <link rel="stylesheet" href="css/style.css">
 
-<style>
-body{
-  margin:0;
-  font-family:system-ui,Arial;
-  background:#f6f7fb;
-}
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:40px 20px 60px;
-}
-h1{
-  margin:0 0 5px;
-}
-.subtitle{
-  margin:0 0 20px;
-  color:#555;
-}
-.editor-wrapper{
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,.06);
-  padding:12px 12px 20px;
-}
-#toolbar{
-  border-radius:8px 8px 0 0;
-}
-#editor{
-  min-height:180px;
-}
-.output{
-  margin-top:24px;
-}
-textarea{
-  width:100%;
-  min-height:140px;
-  padding:12px;
-  font-size:18px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  resize:vertical;
-}
-.actions{
-  margin-top:10px;
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-button{
-  padding:9px 16px;
-  font-size:15px;
-  cursor:pointer;
-  border-radius:6px;
-  border:1px solid #1a73e8;
-  background:#1a73e8;
-  color:#fff;
-}
-button.secondary{
-  background:#fff;
-  color:#1a73e8;
-}
-.toggle-row{
-  margin:10px 0 0;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:14px;
-  color:#333;
-}
-.toggle-row input{
-  transform:scale(1.1);
-}
-.info{
-  margin-top:10px;
-  font-size:13px;
-  color:#777;
-}
-.footer-note{
-  margin-top:26px;
-  font-size:13px;
-  color:#777;
-}
-</style>
+  <style>
+    textarea{
+      width:100%;
+      min-height:180px;
+      padding:14px;
+      font-size:17px;
+      border:2px solid #d1d5db;
+      border-radius:10px;
+      resize:vertical;
+    }
+    textarea:focus{
+      outline:none;
+      border-color:#16a34a;
+      box-shadow:0 0 0 2px #bbf7d0;
+    }
+    .hint{
+      font-size:14px;
+      color:#6b7280;
+      margin-top:6px;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:15px;
+      flex-wrap:wrap;
+    }
+    .actions button{
+      flex:1;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- HEADER -->
+<header>
+  <a href="">UtilityNest</a>
+  <nav>
+    <a href="government-tools/">Government</a>
+    <a href="finance-calculators/">Finance</a>
+    <a href="student-tools/">Student</a>
+    <a href="utility-tools/">Utility</a>
+    <a href="hindi-tools/">Hindi</a>
+  </nav>
+</header>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb">
+  <a href="">Home</a> ›
+  <a href="hindi-tools/">Hindi Tools</a> ›
+  Hindi Typing Tool
+</nav>
+
+<!-- MAIN -->
+<section class="section">
+
   <h1>Hindi Typing Tool</h1>
-  <p class="subtitle">Type in English (mera bharat mahan) → get automatic Hindi: मेरा भारत महान.</p>
+  <p>
+    इस Hindi Typing Tool की मदद से आप
+    <strong>English keyboard</strong> से
+    <strong>सही हिंदी शब्द</strong> टाइप कर सकते हैं।
+    जैसे ही आप टाइप करेंगे, टेक्स्ट अपने-आप
+    सही हिंदी में बदल जाएगा।
+  </p>
 
-  <div class="editor-wrapper">
-    <!-- Toolbar -->
-    <div id="toolbar">
-      <span class="ql-formats">
-        <button class="ql-bold"></button>
-        <button class="ql-italic"></button>
-        <button class="ql-underline"></button>
-      </span>
-      <span class="ql-formats">
-        <button class="ql-list" value="ordered"></button>
-        <button class="ql-list" value="bullet"></button>
-      </span>
-      <span class="ql-formats">
-        <button class="ql-undo">Undo</button>
-        <button class="ql-redo">Redo</button>
-      </span>
-      <span class="ql-formats">
-        <select class="ql-font"></select>
-        <select class="ql-size"></select>
-      </span>
-    </div>
+  <!-- INPUT -->
+  <div class="card gradient-card">
+    <h2>Type in English</h2>
 
-    <!-- Editor -->
-    <div id="editor"></div>
+    <textarea
+      id="englishInput"
+      placeholder="Type here (e.g. mera bharat mahan hai)"
+      oninput="convertToHindi()"></textarea>
 
-    <!-- Mode toggle -->
-    <div class="toggle-row">
-      <input type="checkbox" id="hiToggle" checked>
-      <label for="hiToggle">Enable Hindi transliteration (English → Hindi)</label>
-    </div>
-    <div class="info">
-      Tip: Type like “hindi me likhna bahut aasan hai” and press space for correct Hindi words.
-    </div>
+    <p class="hint">
+      Example: <strong>mera bharat mahan hai</strong> → मेरा भारत महान है।
+    </p>
   </div>
 
-  <!-- Output area -->
-  <div class="output">
-    <h3>Hindi Output (plain text)</h3>
-    <textarea id="output" readonly></textarea>
+  <!-- OUTPUT -->
+  <div class="card">
+    <h2>Hindi Output</h2>
+
+    <textarea
+      id="hindiOutput"
+      placeholder="यहाँ सही हिंदी टेक्स्ट दिखाई देगा..."
+      readonly></textarea>
+
     <div class="actions">
-      <button onclick="copyText()">Copy</button>
-      <button class="secondary" onclick="downloadText()">Download .txt</button>
-      <button class="secondary" onclick="clearAll()">Clear</button>
+      <button class="btn-outline" onclick="copyHindi()">📋 Copy Hindi Text</button>
+      <button class="btn-outline" onclick="clearText()">🧹 Clear</button>
     </div>
   </div>
 
-  <div class="footer-note">
-    Works best in modern browsers (Chrome, Edge, Firefox). Internet connection required for this demo.
+  <!-- SEO CONTENT -->
+  <div class="card">
+    <h2>About Hindi Typing Tool</h2>
+    <p>
+      यह टूल छात्रों, प्रतियोगी परीक्षाओं,
+      ब्लॉगर्स और हिंदी कंटेंट क्रिएटर्स के लिए
+      बेहद उपयोगी है। यह टूल पूरी तरह
+      ब्राउज़र में काम करता है और आपका
+      डेटा कहीं सेव नहीं करता।
+    </p>
   </div>
-</div>
 
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h3>Hindi Tools</h3>
+      <a href="hindi-tools/hindi-word-counter/">Hindi Word Counter</a>
+      <a href="hindi-tools/hindi-character-counter/">Hindi Character Counter</a>
+      <a href="hindi-tools/hindi-typing-tool/">Hindi Typing Tool</a>
+    </div>
+
+    <div>
+      <h3>Popular Tools</h3>
+      <a href="age-calculator/">Age Calculator</a>
+      <a href="emi-calculator/">EMI Calculator</a>
+    </div>
+  </div>
+
+  <p class="copy">© 2025 UtilityNest</p>
+</footer>
+
+<!-- ADVANCED PHONETIC TRANSLITERATION SCRIPT -->
 <script>
-// Register quill-input module with Quill (library exposes QuillInputModule)
-Quill.register('modules/input', window.QuillInputModule || window.QuillInput);
+const consonants = {
+  "k":"क","kh":"ख","g":"ग","gh":"घ","ch":"च","chh":"छ",
+  "j":"ज","jh":"झ","t":"त","th":"थ","d":"द","dh":"ध",
+  "n":"न","p":"प","ph":"फ","b":"ब","bh":"भ","m":"म",
+  "y":"य","r":"र","l":"ल","v":"व","s":"स","sh":"श","h":"ह"
+};
 
-// Custom toolbar handlers for undo/redo
-const icons = Quill.import('ui/icons');
-icons['undo'] = '<span>↺</span>';
-icons['redo'] = '<span>↻</span>';
+const vowels = {
+  "aa":"ा","i":"ि","ii":"ी","u":"ु","uu":"ू",
+  "e":"े","ai":"ै","o":"ो","au":"ौ"
+};
 
-// Initialize editor
-var quill = new Quill('#editor', {
-  theme: 'snow',
-  placeholder: 'Type here: mera bharat mahan hai',
-  modules: {
-    toolbar: {
-      container: '#toolbar',
-      handlers: {
-        'undo': function() {
-          this.quill.history.undo();
-        },
-        'redo': function() {
-          this.quill.history.redo();
-        }
+const standaloneVowels = {
+  "a":"अ","aa":"आ","i":"इ","ii":"ई","u":"उ","uu":"ऊ",
+  "e":"ए","ai":"ऐ","o":"ओ","au":"औ"
+};
+
+function transliterateWord(word){
+  let out = "";
+  let i = 0;
+
+  while(i < word.length){
+    let c3 = word.substr(i,3);
+    let c2 = word.substr(i,2);
+    let c1 = word.substr(i,1);
+
+    if(consonants[c2]){
+      out += consonants[c2];
+      i += 2;
+
+      let v2 = word.substr(i,2);
+      let v1 = word.substr(i,1);
+
+      if(vowels[v2]){
+        out += vowels[v2];
+        i += 2;
+      } else if(vowels[v1]){
+        out += vowels[v1];
+        i += 1;
       }
-    },
-    history: {
-      delay: 1000,
-      maxStack: 100,
-      userOnly: true
-    },
-    // Hindi transliteration using quill-input
-    input: {
-      type: 'text',   // transliteration
-      language: 'hi'  // Hindi
+      continue;
     }
-  }
-});
 
-// Keep output textarea synced with editor's plain Hindi text
-function updateOutput() {
-  document.getElementById("output").value = quill.getText().trim();
+    if(consonants[c1]){
+      out += consonants[c1];
+      i++;
+
+      let v2 = word.substr(i,2);
+      let v1 = word.substr(i,1);
+
+      if(vowels[v2]){
+        out += vowels[v2];
+        i += 2;
+      } else if(vowels[v1]){
+        out += vowels[v1];
+        i += 1;
+      }
+      continue;
+    }
+
+    if(standaloneVowels[c2]){
+      out += standaloneVowels[c2];
+      i += 2;
+      continue;
+    }
+
+    if(standaloneVowels[c1]){
+      out += standaloneVowels[c1];
+      i++;
+      continue;
+    }
+
+    out += word[i];
+    i++;
+  }
+
+  return out;
 }
 
-quill.on('text-change', updateOutput);
+function convertToHindi(){
+  const input = document.getElementById("englishInput").value.toLowerCase();
+  const words = input.split(/\s+/);
+  let output = [];
 
-// Toggle transliteration on/off
-const hiToggle = document.getElementById('hiToggle');
-hiToggle.addEventListener('change', function () {
-  const enabled = this.checked;
-  const inputModule = quill.getModule('input');
-  if (inputModule && inputModule.setEnabled) {
-    inputModule.setEnabled(enabled);
-  } else {
-    // Fallback: simple enable/disable via flag if module API differs
-    quill.root.dataset.hiEnabled = enabled ? '1' : '0';
+  words.forEach(w => {
+    output.push(transliterateWord(w));
+  });
+
+  let finalText = output.join(" ");
+
+  if(finalText && !/[।!?]$/.test(finalText)){
+    finalText += "।";
   }
-});
 
-// Copy to clipboard
-function copyText(){
-  const out = document.getElementById("output");
-  out.focus();
+  document.getElementById("hindiOutput").value = finalText;
+}
+
+function copyHindi(){
+  const out = document.getElementById("hindiOutput");
   out.select();
-  const ok = document.execCommand("copy");
-  if(ok){
-    alert("Copied to clipboard!");
-  }else{
-    alert("Press Ctrl+C to copy.");
-  }
+  document.execCommand("copy");
+  alert("Hindi text copied!");
 }
 
-// Download as .txt
-function downloadText(){
-  const text = document.getElementById("output").value || "";
-  const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement("a");
-  a.href = url;
-  a.download = "hindi-text.txt";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-// Clear editor and output
-function clearAll(){
-  quill.setText('');
-  document.getElementById("output").value = '';
+function clearText(){
+  document.getElementById("englishInput").value = "";
+  document.getElementById("hindiOutput").value = "";
 }
 </script>
 
