@@ -41,26 +41,30 @@
       flex:1;
     }
 
-    /* Suggestion box just under textarea */
-    .suggestion-wrapper{
-      position:relative;
-      margin-top:4px;
-    }
+    /* Draggable suggestion box */
     #letterSuggestions{
       position:absolute;
-      left:0;
-      right:0;
-      top:100%;
-      margin-top:4px;
+      top:260px;
+      left:40px;
+      width:260px;
       background:#ffffff;
       border:1px solid #d1d5db;
       border-radius:6px;
       box-shadow:0 8px 20px rgba(0,0,0,0.08);
       display:none;
       z-index:1000;
-      max-height:200px;
+      max-height:260px;
       overflow-y:auto;
       font-size:15px;
+    }
+    #letterSuggestionsHeader{
+      padding:6px 10px;
+      cursor:move;
+      background:#1d4ed8;
+      color:#ffffff;
+      font-size:13px;
+      border-radius:6px 6px 0 0;
+      user-select:none;
     }
     .letter-suggestion-item{
       padding:6px 10px;
@@ -117,15 +121,11 @@
   <div class="card gradient-card">
     <h2>Type in English</h2>
 
-    <div class="suggestion-wrapper">
-      <textarea
-        id="englishInput"
-        placeholder="Type here (e.g. mera bharat mahan hai)"
-        oninput="handleInput(event)"
-        onkeydown="handleLetterSuggestionKeys(event)"></textarea>
-
-      <div id="letterSuggestions"></div>
-    </div>
+    <textarea
+      id="englishInput"
+      placeholder="Type here (e.g. mera bharat mahan hai)"
+      oninput="handleInput(event)"
+      onkeydown="handleLetterSuggestionKeys(event)"></textarea>
 
     <p class="hint">
       Example: <strong>mera bharat mahan hai</strong> → मेरा भारत महान है।
@@ -181,9 +181,15 @@
   <p class="copy">© 2025 UtilityNest</p>
 </footer>
 
-<!-- ADVANCED PHONETIC TRANSLITERATION + LETTER SUGGESTIONS -->
+<!-- DRAGGABLE LETTER SUGGESTIONS BOX -->
+<div id="letterSuggestions">
+  <div id="letterSuggestionsHeader">Drag suggestions</div>
+  <div id="letterSuggestionsBody"></div>
+</div>
+
+<!-- SCRIPT -->
 <script>
-// ----- FULL TOKEN MAP (same as your working version) -----
+// ---------- FULL MAP + VOWELS ----------
 const FULL_MAP = {
   "ka":"क","kaa":"का","ki":"कि","kee":"की","ku":"कु","koo":"कू","ke":"के",
   "kai":"कै","ko":"को","kau":"कौ","kam":"कं","kah":"कः",
@@ -288,43 +294,42 @@ const FULL_MAP = {
   "dnye":"ज्ञे","dnyai":"ज्ञै","dnyo":"ज्ञो","dnyau":"ज्ञौ","dnyam":"ज्ञं","dnyah":"ज्ञः"
 };
 
-// Standalone vowels
 const STANDALONE_VOWELS = {
   "a":"अ","aa":"आ","i":"इ","ee":"ई","u":"उ","oo":"ऊ",
   "e":"ए","ai":"ऐ","o":"ओ","au":"औ"
 };
 
-// Per-letter suggestion list for each roman key
+// ----- LETTER SUGGESTIONS (same as previous answer) -----
 const LETTER_SUGGESTIONS = {
-  "k": [
+  "k":[
     {dev:"क", roman:"ka"},
     {dev:"क्", roman:"k (halant)"},
     {dev:"कं", roman:"kam (anusvara)"},
     {dev:"कँ", roman:"kã (chandrabindu)"},
     {dev:"कः", roman:"kah (visarga)"}
   ],
-  "g": [
+  "g":[
     {dev:"ग", roman:"ga"},
     {dev:"ग्", roman:"g (halant)"},
     {dev:"गं", roman:"gam (anusvara)"},
     {dev:"गँ", roman:"gã (chandrabindu)"},
     {dev:"गः", roman:"gah (visarga)"}
   ],
-  "c": [
+  "c":[
     {dev:"च", roman:"ca/cha"},
     {dev:"च्", roman:"c (halant)"},
     {dev:"चं", roman:"cam (anusvara)"},
     {dev:"चँ", roman:"cã (chandrabindu)"},
     {dev:"चः", roman:"cah (visarga)"}
   ],
-  "j": [
+  "j":[
     {dev:"ज", roman:"ja"},
     {dev:"ज्", roman:"j (halant)"},
     {dev:"जं", roman:"jam (anusvara)"},
     {dev:"जँ", roman:"jã (chandrabindu)"},
     {dev:"जः", roman:"jah (visarga)"}
   ],
-  "t": [
+  "t":[
     {dev:"त", roman:"ta (dental)"},
     {dev:"ट", roman:"Ta (retroflex)"},
     {dev:"त्", roman:"t (halant)"},
@@ -333,7 +338,7 @@ const LETTER_SUGGESTIONS = {
     {dev:"तँ", roman:"tã (chandrabindu)"},
     {dev:"तः", roman:"tah (visarga)"}
   ],
-  "d": [
+  "d":[
     {dev:"द", roman:"da (dental)"},
     {dev:"ड", roman:"Da (retroflex)"},
     {dev:"द्", roman:"d (halant)"},
@@ -342,25 +347,25 @@ const LETTER_SUGGESTIONS = {
     {dev:"दँ", roman:"dã (chandrabindu)"},
     {dev:"दः", roman:"dah (visarga)"}
   ],
-  "n": [
+  "n":[
     {dev:"न", roman:"na (dental)"},
     {dev:"ण", roman:"Na (retroflex)"},
     {dev:"न्", roman:"n (halant)"},
     {dev:"ण्", roman:"N (halant)"},
-    {dev:"ं", roman:"anusvara (generic nasal)"},
-    {dev:"ँ", roman:"chandrabindu (nasalization)"},
+    {dev:"ं", roman:"anusvara"},
+    {dev:"ँ", roman:"chandrabindu"},
     {dev:"नं", roman:"nam (anusvara)"},
     {dev:"नः", roman:"nah (visarga)"},
     {dev:"n", roman:"keep n as roman"}
   ],
-  "p": [
+  "p":[
     {dev:"प", roman:"pa"},
     {dev:"प्", roman:"p (halant)"},
     {dev:"पं", roman:"pam (anusvara)"},
     {dev:"पँ", roman:"pã (chandrabindu)"},
     {dev:"पः", roman:"pah (visarga)"}
   ],
-  "b": [
+  "b":[
     {dev:"ब", roman:"ba"},
     {dev:"भ", roman:"bha"},
     {dev:"ब्", roman:"b (halant)"},
@@ -369,7 +374,7 @@ const LETTER_SUGGESTIONS = {
     {dev:"बँ", roman:"bã (chandrabindu)"},
     {dev:"बः", roman:"bah (visarga)"}
   ],
-  "m": [
+  "m":[
     {dev:"म", roman:"ma"},
     {dev:"म्", roman:"m (halant)"},
     {dev:"ं", roman:"anusvara"},
@@ -377,21 +382,21 @@ const LETTER_SUGGESTIONS = {
     {dev:"मं", roman:"mam (anusvara)"},
     {dev:"मः", roman:"mah (visarga)"}
   ],
-  "y": [
+  "y":[
     {dev:"य", roman:"ya"},
     {dev:"य्", roman:"y (halant)"},
     {dev:"यं", roman:"yam (anusvara)"},
     {dev:"यँ", roman:"yã (chandrabindu)"},
     {dev:"यः", roman:"yah (visarga)"}
   ],
-  "r": [
+  "r":[
     {dev:"र", roman:"ra"},
     {dev:"र्", roman:"r (halant)"},
     {dev:"रं", roman:"ram (anusvara)"},
     {dev:"रँ", roman:"rã (chandrabindu)"},
     {dev:"रः", roman:"rah (visarga)"}
   ],
-  "l": [
+  "l":[
     {dev:"ल", roman:"la"},
     {dev:"ळ", roman:"ḷa"},
     {dev:"ल्", roman:"l (halant)"},
@@ -400,14 +405,14 @@ const LETTER_SUGGESTIONS = {
     {dev:"लँ", roman:"lã (chandrabindu)"},
     {dev:"लः", roman:"lah (visarga)"}
   ],
-  "v": [
+  "v":[
     {dev:"व", roman:"va/wa"},
     {dev:"व्", roman:"v (halant)"},
     {dev:"वं", roman:"vam (anusvara)"},
     {dev:"वँ", roman:"vã (chandrabindu)"},
     {dev:"वः", roman:"vah (visarga)"}
   ],
-  "s": [
+  "s":[
     {dev:"स", roman:"sa"},
     {dev:"श", roman:"sha"},
     {dev:"ष", roman:"Sha"},
@@ -416,43 +421,43 @@ const LETTER_SUGGESTIONS = {
     {dev:"सँ", roman:"sã (chandrabindu)"},
     {dev:"सः", roman:"sah (visarga)"}
   ],
-  "h": [
+  "h":[
     {dev:"ह", roman:"ha"},
     {dev:"ः", roman:"visarga"},
     {dev:"ह्", roman:"h (halant)"},
     {dev:"हं", roman:"ham (anusvara)"},
     {dev:"हँ", roman:"hã (chandrabindu)"}
   ],
-  "x": [
+  "x":[
     {dev:"ं", roman:"anusvara"},
     {dev:"ँ", roman:"chandrabindu"},
     {dev:"ः", roman:"visarga"}
   ],
-  "a": [
+  "a":[
     {dev:"अ", roman:"a"},
     {dev:"आ", roman:"aa"},
     {dev:"ा", roman:"aa matra"},
     {dev:"ॅ", roman:"short a (optional)"}
   ],
-  "i": [
+  "i":[
     {dev:"इ", roman:"i"},
     {dev:"ई", roman:"ii"},
-    {dev:"ि", roman:"i matra (before)"},
+    {dev:"ि", roman:"i matra"},
     {dev:"ी", roman:"ii matra"}
   ],
-  "u": [
+  "u":[
     {dev:"उ", roman:"u"},
     {dev:"ऊ", roman:"uu"},
     {dev:"ु", roman:"u matra"},
     {dev:"ू", roman:"uu matra"}
   ],
-  "e": [
+  "e":[
     {dev:"ए", roman:"e"},
     {dev:"ऐ", roman:"ai"},
     {dev:"े", roman:"e matra"},
     {dev:"ै", roman:"ai matra"}
   ],
-  "o": [
+  "o":[
     {dev:"ओ", roman:"o"},
     {dev:"औ", roman:"au"},
     {dev:"ो", roman:"o matra"},
@@ -460,7 +465,7 @@ const LETTER_SUGGESTIONS = {
   ]
 };
 
-// Helper: find longest token
+// ----- TRANSLITERATION -----
 function matchToken(str, i){
   let maxLen = Math.min(5, str.length - i);
   for(let len = maxLen; len > 0; len--){
@@ -471,7 +476,6 @@ function matchToken(str, i){
   return null;
 }
 
-// Transliterate single word
 function transliterateWord(word){
   let out = "";
   let i = 0;
@@ -488,7 +492,6 @@ function transliterateWord(word){
   return out;
 }
 
-// Convert entire textarea
 function convertToHindi(){
   const input = document.getElementById("englishInput").value.toLowerCase();
   const parts = input.split(/(\s+)/);
@@ -505,7 +508,7 @@ function convertToHindi(){
   document.getElementById("hindiOutput").value = result;
 }
 
-// ===== Letter suggestion logic =====
+// ----- LETTER SUGGESTION LOGIC -----
 let letterSuggestionsList = [];
 let letterActiveIndex = -1;
 
@@ -516,20 +519,19 @@ function getCurrentCharInfo(textarea){
   return {char, pos};
 }
 
-// called on input
 function handleInput(e){
   convertToHindi();
   showLetterSuggestions(e);
 }
 
-// show suggestions for last typed roman letter
 function showLetterSuggestions(e){
   const ta = e.target;
   const info = getCurrentCharInfo(ta);
   const ch = info.char.toLowerCase();
   const box = document.getElementById("letterSuggestions");
+  const body = document.getElementById("letterSuggestionsBody");
 
-  box.innerHTML = "";
+  body.innerHTML = "";
   box.style.display = "none";
   letterSuggestionsList = [];
   letterActiveIndex = -1;
@@ -537,7 +539,6 @@ function showLetterSuggestions(e){
   if(!ch || !LETTER_SUGGESTIONS[ch]) return;
 
   const options = LETTER_SUGGESTIONS[ch];
-
   options.forEach(opt => {
     const div = document.createElement("div");
     div.className = "letter-suggestion-item";
@@ -557,32 +558,32 @@ function showLetterSuggestions(e){
       applyLetterSuggestion(opt.dev, ch);
     });
 
-    box.appendChild(div);
+    body.appendChild(div);
   });
 
   letterSuggestionsList = options;
   box.style.display = "block";
 }
 
-// replace last roman char with chosen Devanagari
+// IMPORTANT: change only Hindi output, keep English input as typed
 function applyLetterSuggestion(devChar, romanChar){
   const ta = document.getElementById("englishInput");
   const pos = ta.selectionStart;
-  const value = ta.value;
+  const out = document.getElementById("hindiOutput");
+  const currentHindi = out.value;
 
-  const before = value.substring(0, pos - 1);
-  const after  = value.substring(pos);
+  // replace at same cursor index in Hindi output
+  const beforeHindi = currentHindi.substring(0, pos - 1);
+  const afterHindi  = currentHindi.substring(pos);
 
-  ta.value = before + devChar + after;
+  out.value = beforeHindi + devChar + afterHindi;
 
-  const newPos = before.length + devChar.length;
-  ta.selectionStart = ta.selectionEnd = newPos;
+  // keep caret position in english input
+  ta.selectionStart = ta.selectionEnd = pos;
 
   document.getElementById("letterSuggestions").style.display = "none";
-  convertToHindi();
 }
 
-// keyboard navigation: ↑ ↓ Enter Esc
 function handleLetterSuggestionKeys(e){
   const box = document.getElementById("letterSuggestions");
   if(box.style.display === "none") return;
@@ -615,7 +616,46 @@ function handleLetterSuggestionKeys(e){
   if(letterActiveIndex >= 0) items[letterActiveIndex].classList.add("active");
 }
 
-// COPY & CLEAR
+// ----- DRAGGABLE BOX (W3Schools style) -----
+dragElement(document.getElementById("letterSuggestions")); // [web:66]
+
+function dragElement(elmnt){
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  const header = document.getElementById(elmnt.id + "Header");
+
+  if(header){
+    header.onmousedown = dragMouseDown;
+  }else{
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e){
+    e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e){
+    e = e || window.event;
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    elmnt.style.top  = (elmnt.offsetTop  - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement(){
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+
+// ----- COPY & CLEAR -----
 function copyHindi(){
   const out = document.getElementById("hindiOutput");
   out.select();
