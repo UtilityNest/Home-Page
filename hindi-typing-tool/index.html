@@ -40,6 +40,39 @@
     .actions button{
       flex:1;
     }
+
+    /* Suggestion container */
+    .suggestion-wrapper{
+      position:relative;
+      margin-top:8px;
+    }
+    #suggestionsBox{
+      position:absolute;
+      left:0;
+      right:0;
+      top:100%;
+      margin-top:4px;
+      background:#ffffff;
+      border:1px solid #d1d5db;
+      border-radius:6px;
+      max-height:180px;
+      overflow-y:auto;
+      display:none;
+      z-index:1000;
+      font-size:14px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    }
+    .suggestion-item{
+      padding:6px 10px;
+      cursor:pointer;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+      overflow:hidden;
+    }
+    .suggestion-item:hover,
+    .suggestion-item.active{
+      background:#e5f3ff;
+    }
   </style>
 </head>
 
@@ -80,10 +113,15 @@
   <div class="card gradient-card">
     <h2>Type in English</h2>
 
-    <textarea
-      id="englishInput"
-      placeholder="Type here (e.g. mera bharat mahan hai)"
-      oninput="convertToHindi()"></textarea>
+    <div class="suggestion-wrapper">
+      <textarea
+        id="englishInput"
+        placeholder="Type here (e.g. mera bharat mahan hai)"
+        oninput="handleInput(event)"
+        onkeydown="handleSuggestionKeys(event)"></textarea>
+
+      <div id="suggestionsBox"></div>
+    </div>
 
     <p class="hint">
       Example: <strong>mera bharat mahan hai</strong> → मेरा भारत महान है।
@@ -139,11 +177,9 @@
   <p class="copy">© 2025 UtilityNest</p>
 </footer>
 
-<!-- ADVANCED PHONETIC TRANSLITERATION SCRIPT -->
+<!-- ADVANCED PHONETIC TRANSLITERATION + SUGGESTIONS -->
 <script>
-
 // Full-token mapping: roman -> Devanagari
-// Includes all independent forms and vowel-mātrā forms you supplied.
 const FULL_MAP = {
   // क (ka group)
   "ka":"क","kaa":"का","ki":"कि","kee":"की","ku":"कु","koo":"कू","ke":"के",
@@ -177,24 +213,24 @@ const FULL_MAP = {
   "jha":"झ","jhaa":"झा","jhi":"झि","jhee":"झी","jhu":"झु","jhoo":"झू",
   "jhe":"झे","jhai":"झै","jho":"झो","jhau":"झौ","jham":"झं","jhah":"झः",
 
-  // त्र / your given sequence with 'tra'
+  // त्र (tra group)
   "tra":"त्र","traa":"त्रा","tri":"त्रि","tree":"त्री","tru":"त्रु","troo":"त्रू",
   "tre":"त्रे","trai":"त्रै","tro":"त्रो",
-  "trau":"ञौ","tram":"ञं","trah":"ञः",   // exactly as your list
+  "trau":"ञौ","tram":"ञं","trah":"ञः",
 
-  // ट (ta group)
+  // ट (ta retroflex group)
   "ta":"ट","taa":"टा","ti":"टि","tee":"टी","tu":"टु","too":"टू",
   "te":"टे","tai":"टै","to":"टो","tau":"टौ","tam":"टं","tah":"टः",
 
-  // ठ (tha group)
+  // ठ (tha retroflex group)
   "tha":"ठ","thaa":"ठा","thi":"ठि","thee":"ठी","thu":"ठु","thoo":"ठू",
   "the":"ठे","thai":"ठै","tho":"ठो","thau":"ठौ","tham":"ठं","thah":"ठः",
 
-  // ड (da group)
+  // ड (da retroflex group)
   "da":"ड","daa":"डा","di":"डि","dee":"डी","du":"डु","doo":"डू",
   "de":"डे","dai":"डै","do":"डो","dau":"डौ","dam":"डं","dah":"डः",
 
-  // ढ (dha group)
+  // ढ (dha retroflex group)
   "dha":"ढ","dhaa":"ढा","dhi":"ढि","dhee":"ढी","dhu":"ढु","dhoo":"ढू",
   "dhe":"ढे","dhai":"ढै","dhao":"ढो","dhau":"ढौ","dham":"ढं","dhah":"ढः",
 
@@ -283,27 +319,21 @@ const FULL_MAP = {
   "dnye":"ज्ञे","dnyai":"ज्ञै","dnyo":"ज्ञो","dnyau":"ज्ञौ","dnyam":"ज्ञं","dnyah":"ज्ञः"
 };
 
- const consonants = {
-  "k":"क","kh":"ख","g":"ग","gh":"घ","ch":"च","chh":"छ",
-  "j":"ज","jh":"झ","t":"त","th":"थ","d":"द","dh":"ध",
-  "n":"न","p":"प","ph":"फ","b":"ब","bh":"भ","m":"म",
-  "y":"य","r":"र","l":"ल","v":"व","s":"स","sh":"श","h":"ह"
-};
-
-const vowels = {
-  "aa":"ा","i":"ि","ii":"ी","u":"ु","uu":"ू",
-  "e":"े","ai":"ै","o":"ो","au":"ौ"
-};
- 
 // Basic vowels (independent)
 const STANDALONE_VOWELS = {
   "a":"अ","aa":"आ","i":"इ","ee":"ई","u":"उ","oo":"ऊ",
   "e":"ए","ai":"ऐ","o":"ओ","au":"औ"
 };
 
-// Helper: find longest matching token from FULL_MAP at position i
+// Suggestions dictionary (extend as needed)
+const SUGGEST_WORDS = [
+  "mera","bharat","mahan","hai",
+  "hindi","typing","tool","rajya","sarkar","adhikari",
+  "shabd","vyaakaran","patr","pariksha","student","teacher"
+];
+
+// Helper: find longest matching token from FULL_MAP or STANDALONE_VOWELS
 function matchToken(str, i){
-  // try up to length 5, down to 1
   let maxLen = Math.min(5, str.length - i);
   for(let len = maxLen; len > 0; len--){
     let sub = str.substr(i, len);
@@ -323,7 +353,6 @@ function transliterateWord(word){
       out += m.val;
       i += m.len;
     }else{
-      // keep unknown char as-is (numbers, punctuation, etc.)
       out += word[i];
       i++;
     }
@@ -331,9 +360,10 @@ function transliterateWord(word){
   return out;
 }
 
+// Convert full textarea value
 function convertToHindi(){
   const input = document.getElementById("englishInput").value.toLowerCase();
-  const parts = input.split(/(\s+)/); // keep spaces
+  const parts = input.split(/(\s+)/);
   let result = "";
 
   parts.forEach(part => {
@@ -347,6 +377,113 @@ function convertToHindi(){
   document.getElementById("hindiOutput").value = result;
 }
 
+// ========== WORD SUGGESTION LOGIC ==========
+
+let currentSuggestions = [];
+let activeIndex = -1;
+
+// Get current word around cursor
+function getCurrentWordInfo(textarea){
+  const pos = textarea.selectionStart;
+  const value = textarea.value;
+  let start = pos - 1;
+  while(start >= 0 && !/\s/.test(value[start])) start--;
+  start++;
+  let end = pos;
+  while(end < value.length && !/\s/.test(value[end])) end++;
+  const word = value.substring(start, end);
+  return {word, start, end, pos};
+}
+
+// Called on textarea input (updates Hindi + suggestions)
+function handleInput(e){
+  convertToHindi();
+  showSuggestions(e);
+}
+
+// Show suggestion list
+function showSuggestions(e){
+  const ta = e.target;
+  const info = getCurrentWordInfo(ta);
+  const word = info.word.toLowerCase();
+
+  const box = document.getElementById("suggestionsBox");
+  box.innerHTML = "";
+  box.style.display = "none";
+  currentSuggestions = [];
+  activeIndex = -1;
+
+  if(!word || word.length < 2) return;
+
+  const matches = SUGGEST_WORDS
+    .filter(w => w.startsWith(word))
+    .slice(0, 8);
+
+  if(matches.length === 0) return;
+
+  matches.forEach(m => {
+    const div = document.createElement("div");
+    div.className = "suggestion-item";
+    div.textContent = m;
+    div.addEventListener("mousedown", function(ev){
+      ev.preventDefault();
+      applySuggestion(m);
+    });
+    box.appendChild(div);
+  });
+
+  currentSuggestions = matches;
+  box.style.display = "block";
+}
+
+// Replace current word with selected suggestion
+function applySuggestion(word){
+  const ta = document.getElementById("englishInput");
+  const info = getCurrentWordInfo(ta);
+  const value = ta.value;
+  const before = value.substring(0, info.start);
+  const after  = value.substring(info.end);
+  ta.value = before + word + after;
+  const newPos = before.length + word.length;
+  ta.selectionStart = ta.selectionEnd = newPos;
+
+  document.getElementById("suggestionsBox").style.display = "none";
+  convertToHindi();
+}
+
+// Keyboard navigation for suggestions
+function handleSuggestionKeys(e){
+  const box = document.getElementById("suggestionsBox");
+  if(box.style.display === "none") return;
+
+  const items = box.querySelectorAll(".suggestion-item");
+  if(items.length === 0) return;
+
+  if(e.key === "ArrowDown"){
+    e.preventDefault();
+    activeIndex = (activeIndex + 1) % items.length;
+  }else if(e.key === "ArrowUp"){
+    e.preventDefault();
+    activeIndex = (activeIndex - 1 + items.length) % items.length;
+  }else if(e.key === "Enter"){
+    if(activeIndex >= 0){
+      e.preventDefault();
+      applySuggestion(currentSuggestions[activeIndex]);
+      return;
+    }
+  }else if(e.key === "Escape"){
+    box.style.display = "none";
+    return;
+  }else{
+    return;
+  }
+
+  items.forEach(el => el.classList.remove("active"));
+  if(activeIndex >= 0) items[activeIndex].classList.add("active");
+}
+
+// ========== COPY & CLEAR ==========
+
 function copyHindi(){
   const out = document.getElementById("hindiOutput");
   out.select();
@@ -357,6 +494,7 @@ function copyHindi(){
 function clearText(){
   document.getElementById("englishInput").value = "";
   document.getElementById("hindiOutput").value = "";
+  document.getElementById("suggestionsBox").style.display = "none";
 }
 </script>
 
