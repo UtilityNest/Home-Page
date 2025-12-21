@@ -216,7 +216,7 @@
 <div class="container">
   <div class="header">
     <h1>🇮🇳 Hindi Typing Tool</h1>
-    <p>Type in Hindi using Roman (English) Keyboard</p>
+    <p>Type in Hindi using Roman (English) Keyboard | Like EasyHindiTyping.com</p>
   </div>
 
   <div class="main-content">
@@ -225,7 +225,7 @@
       <textarea 
         id="englishInput" 
         placeholder="Type here: aap kaise hain&#10;mera bharat mahan hai&#10;namaste&#10;dhanyavaad"></textarea>
-      <p class="hint-text">💡 Type English and it converts to Hindi. Delete and edit freely.</p>
+      <p class="hint-text">💡 Type English and it converts to Hindi automatically. Delete and edit freely.</p>
     </div>
 
     <div class="box">
@@ -257,13 +257,14 @@
       <li><span class="code-example">shukriya</span> → शुक्रिया</li>
       <li><span class="code-example">rajasthan</span> → राजस्थान</li>
       <li><span class="code-example">sarkaari</span> → सरकारी</li>
+      <li><span class="code-example">pariksha</span> → परीक्षा</li>
     </ul>
 
     <p><strong>Phonetic Rules:</strong></p>
     <ul>
       <li><strong>Vowels:</strong> a, aa, i, ii, u, uu, oo, e, ai, o, au</li>
       <li><strong>Consonants:</strong> k, kh, g, gh, ch, chh, j, jh, t, th, d, dh, p, ph, b, bh, m, y, r, l, v, w, s, sh, h</li>
-      <li><strong>Combinations:</strong> kh=ख, gh=घ, ch=च, chh=छ, sh=श, th=ठ, dh=ढ, ph=फ</li>
+      <li><strong>Examples:</strong> kh=ख, gh=घ, ch=च, chh=छ, sh=श, th=ठ, dh=ढ, ph=फ</li>
     </ul>
   </div>
 
@@ -273,60 +274,70 @@
 </div>
 
 <script>
-const HINDI_MAP = {
-  // Double vowels first (longer sequences)
-  'aa': 'आ', 'ii': 'ई', 'uu': 'ऊ', 'oo': 'ऊ', 'ee': 'ई',
-  
-  // Single vowels
-  'a': 'अ', 'i': 'इ', 'u': 'उ', 
-  'e': 'ए', 'o': 'ओ',
-  'ai': 'ऐ', 'au': 'औ', 'ao': 'औ',
-  'ri': 'ऋ', 'rri': 'ऋ',
-  'an': 'अं', 'am': 'अं', 'ah': 'अः',
-  
-  // Three letter combinations
-  'chh': 'छ', 'jh': 'झ', 'dh': 'ढ', 'th': 'ठ', 'ny': 'ञ', 'ng': 'ङ',
-  'ksh': 'क्ष', 'gya': 'ज्ञ', 'jna': 'ज्ञ', 'shr': 'श्र',
-  
-  // Two letter combinations
-  'kh': 'ख', 'gh': 'घ', 'ch': 'च', 'sh': 'श', 'ph': 'फ', 'bh': 'भ',
-  'ka': 'क', 'ki': 'कि', 'ku': 'कु', 'ke': 'के', 'ko': 'को',
-  'ga': 'ग', 'gi': 'गि', 'gu': 'गु', 'ge': 'गे', 'go': 'गो',
-  'ta': 'त', 'ti': 'ति', 'tu': 'तु', 'te': 'ते', 'to': 'तो',
-  'da': 'द', 'di': 'दि', 'du': 'दु', 'de': 'दे', 'do': 'दो',
-  'pa': 'प', 'pi': 'पि', 'pu': 'पु', 'pe': 'पे', 'po': 'पो',
-  'ba': 'ब', 'bi': 'बि', 'bu': 'बु', 'be': 'बे', 'bo': 'बो',
-  'ma': 'म', 'mi': 'मि', 'mu': 'मु', 'me': 'मे', 'mo': 'मो',
-  'ya': 'य', 'yi': 'यि', 'yu': 'यु', 'ye': 'ये', 'yo': 'यो',
-  'ra': 'र', 'ri': 'रि', 'ru': 'रु', 're': 'रे', 'ro': 'रो',
-  'la': 'ल', 'li': 'लि', 'lu': 'लु', 'le': 'ले', 'lo': 'लो',
-  'va': 'व', 'vi': 'वि', 'vu': 'वु', 've': 'वे', 'vo': 'वो',
-  'wa': 'व', 'wi': 'वि', 'wu': 'वु', 'we': 'वे', 'wo': 'वो',
-  'sa': 'स', 'si': 'सि', 'su': 'सु', 'se': 'से', 'so': 'सो',
-  'ha': 'ह', 'hi': 'हि', 'hu': 'हु', 'he': 'हे', 'ho': 'हो',
-  'ja': 'ज', 'ji': 'जि', 'ju': 'जु', 'je': 'जे', 'jo': 'जो',
-  'tha': 'थ', 'thi': 'थि', 'thu': 'थु', 'the': 'थे', 'tho': 'थो',
-  'pha': 'फ', 'phi': 'फि', 'phu': 'फु', 'phe': 'फे', 'pho': 'फो',
-  'sha': 'श', 'shi': 'शि', 'shu': 'शु', 'she': 'शे', 'sho': 'शो',
-  'ss': 'ष', 'nn': 'ण', 'dd': 'ड', 'tt': 'ट', 'f': 'फ',
-  
-  // Single consonants
-  'k': 'क', 'g': 'ग', 'ch': 'च', 'j': 'ज', 
-  't': 'त', 'd': 'ड', 'n': 'न',
-  'p': 'प', 'b': 'ब', 'm': 'म',
-  'y': 'य', 'r': 'र', 'l': 'ल', 'v': 'व', 'w': 'व',
-  's': 'स', 'h': 'ह',
-  
-  '.': '।'
+// ===================== VOWEL MAPPINGS =====================
+const VOWELS = {
+  'aa': 'आ',
+  'ii': 'ई', 
+  'ee': 'ई',
+  'uu': 'ऊ',
+  'oo': 'ऊ',
+  'a': 'अ',
+  'i': 'इ',
+  'u': 'उ',
+  'e': 'ए',
+  'o': 'ओ',
+  'ai': 'ऐ',
+  'au': 'औ',
+  'ao': 'औ'
 };
 
-// Reverse sort by key length to match longest first
-const SORTED_HINDI_MAP = {};
-Object.keys(HINDI_MAP)
-  .sort((a, b) => b.length - a.length)
-  .forEach(key => {
-    SORTED_HINDI_MAP[key] = HINDI_MAP[key];
-  });
+// ===================== CONSONANT MAPPINGS =====================
+const CONSONANTS = {
+  // 3-letter combinations (must be before 2-letter)
+  'ksh': 'क्ष',
+  'gya': 'ज्ञ',
+  'jna': 'ज्ञ',
+  'shr': 'श्र',
+  
+  // 2-letter combinations (must be before 1-letter)
+  'kh': 'ख',
+  'gh': 'घ',
+  'ng': 'ङ',
+  'ch': 'च',
+  'chh': 'छ',
+  'jh': 'झ',
+  'ny': 'ञ',
+  'tt': 'ट',
+  'th': 'ठ',
+  'dd': 'ड',
+  'dh': 'ढ',
+  'nn': 'ण',
+  't': 'त',
+  'tha': 'थ',
+  'd': 'द',
+  'dha': 'ध',
+  'n': 'न',
+  'ph': 'फ',
+  'f': 'फ',
+  'bh': 'भ',
+  'sh': 'श',
+  'ss': 'ष',
+  
+  // 1-letter consonants
+  'k': 'क',
+  'g': 'ग',
+  'j': 'ज',
+  'p': 'प',
+  'b': 'ब',
+  'm': 'म',
+  'y': 'य',
+  'r': 'र',
+  'l': 'ल',
+  'v': 'व',
+  'w': 'व',
+  's': 'स',
+  'h': 'ह'
+};
 
 function convertToHindi(romanText) {
   if (!romanText) return '';
@@ -344,20 +355,31 @@ function convertWord(word) {
   let i = 0;
   
   while (i < word.length) {
-    let found = false;
+    let matched = false;
     
+    // Try 5 character combinations first (greedy matching - LONGEST FIRST)
     for (let len = Math.min(5, word.length - i); len >= 1; len--) {
       const chunk = word.substring(i, i + len);
       
-      if (SORTED_HINDI_MAP[chunk]) {
-        result += SORTED_HINDI_MAP[chunk];
+      // Try vowels
+      if (VOWELS[chunk]) {
+        result += VOWELS[chunk];
         i += len;
-        found = true;
+        matched = true;
+        break;
+      }
+      
+      // Try consonants
+      if (CONSONANTS[chunk]) {
+        result += CONSONANTS[chunk];
+        i += len;
+        matched = true;
         break;
       }
     }
     
-    if (!found) {
+    // If no match, keep character as is
+    if (!matched) {
       result += word[i];
       i++;
     }
@@ -369,10 +391,12 @@ function convertWord(word) {
 const englishInput = document.getElementById('englishInput');
 const hindiOutput = document.getElementById('hindiOutput');
 
+// Real-time conversion on input
 englishInput.addEventListener('input', function() {
   hindiOutput.value = convertToHindi(this.value);
 });
 
+// Handle Backspace and arrow keys
 englishInput.addEventListener('keydown', function(e) {
   if (e.key === 'Backspace' || e.key === 'Delete' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
     setTimeout(() => {
