@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <base href="/Home/">
 
-  <!-- GLOBAL CSS -->
   <link rel="stylesheet" href="css/style.css">
 
   <style>
@@ -40,7 +39,6 @@
       flex:1;
     }
 
-    /* Suggestion UI */
     .suggestion-wrapper{
       position:relative;
       margin-top:8px;
@@ -75,7 +73,6 @@
   </style>
 </head>
 <body>
-  <!-- HEADER -->
   <header>
     <a href="">UtilityNest</a>
     <nav>
@@ -87,24 +84,19 @@
     </nav>
   </header>
 
-  <!-- BREADCRUMB -->
   <nav class="breadcrumb">
     <a href="">Home</a> ›
     <a href="hindi-tools/">Hindi Tools</a> ›
     Hindi Typing Tool
   </nav>
 
-  <!-- MAIN -->
   <section class="section">
     <h1>Hindi Typing Tool</h1>
     <p>
-      इस Hindi Typing Tool की मदद से आप
-      <strong>English keyboard</strong> से
-      <strong>सही हिंदी शब्द</strong> टाइप कर सकते हैं।
-      जैसे ही आप टाइप करेंगे, टेक्स्ट अपने-आप सही हिंदी में बदल जाएगा।
+      इस Hindi Typing Tool की मदद से आप <strong>English keyboard</strong> से
+      सही और प्राकृतिक हिंदी टाइप कर सकते हैं।
     </p>
 
-    <!-- INPUT -->
     <div class="card gradient-card">
       <h2>Type in English</h2>
 
@@ -123,7 +115,6 @@
       </p>
     </div>
 
-    <!-- OUTPUT -->
     <div class="card">
       <h2>Hindi Output</h2>
       <textarea
@@ -137,17 +128,15 @@
       </div>
     </div>
 
-    <!-- INFO -->
     <div class="card">
       <h2>About Hindi Typing Tool</h2>
       <p>
-        यह टूल छात्रों, प्रतियोगी परीक्षाओं, ब्लॉगर्स और हिंदी कंटेंट क्रिएटर्स के लिए बेहद उपयोगी है।
-        यह टूल पूरी तरह ब्राउज़र में काम करता है और आपका डेटा कहीं सेव नहीं करता।
+        यह टूल छात्रों, प्रतियोगी परीक्षाओं, ब्लॉगर्स और हिंदी कंटेंट क्रिएटर्स के लिए उपयोगी है।
+        यह पूरी तरह ब्राउज़र में चलता है और आपका डेटा सर्वर पर सेव नहीं करता।
       </p>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-grid">
       <div>
@@ -165,23 +154,21 @@
     <p class="copy">© 2025 UtilityNest</p>
   </footer>
 
-  <!-- TRANSLITERATION + SUGGESTIONS -->
   <script>
-    /*
-      Simplified phonetic rules:
-      - Normal user typing uses: t/d/n = त/द/न (dental).
-      - Retroflex ट/ड/ण available with tt/dd/nn when needed.
-      - No taa2, na2 etc.
-    */
+    // Intuitive phonetic mapping:
+    // - 'mera' -> मेरा (me + ra)
+    // - 'bharat' -> भारत
+    // - 'mahan' -> महान
+    // - 'hai' -> है
 
     const FULL_MAP = {
-      // Vowel-only syllables (common patterns)
+      // independent vowels (for standalone words like "a", "aa" etc.)
       "a":"अ","aa":"आ","i":"इ","ee":"ई","u":"उ","oo":"ऊ",
       "e":"ए","ai":"ऐ","o":"ओ","au":"औ",
 
       // क group
-      "ka":"क","kaa":"का","ki":"कि","kee":"की","kee":"की","ku":"कु","koo":"कू","ke":"के",
-      "kai":"कै","ko":"को","kau":"कौ","kam":"कं","kah":"कः",
+      "ka":"क","kaa":"का","ki":"कि","kee":"की","ku":"कु","koo":"कू",
+      "ke":"के","kai":"कै","ko":"को","kau":"कौ","kam":"कं","kah":"कः",
 
       // ख
       "kha":"ख","khaa":"खा","khi":"खि","khee":"खी","khu":"खु","khoo":"खू",
@@ -211,7 +198,23 @@
       "jha":"झ","jhaa":"झा","jhi":"झि","jhee":"झी","jhu":"झु","jhoo":"झू",
       "jhe":"झे","jhai":"झै","jho":"झो","jhau":"झौ","jham":"झं","jhah":"झः",
 
-      // ट / ठ / ड / ढ retroflex via double letters
+      // normal dental त, थ, द, ध, न
+      "ta":"त","taa":"ता","ti":"ति","tee":"ती","tu":"तु","too":"तू",
+      "te":"ते","tai":"तै","to":"तो","tau":"तौ","tam":"तं","tah":"तः",
+
+      "tha":"थ","thaa":"था","thi":"थि","thee":"थी","thu":"थु","thoo":"थू",
+      "the":"थे","thai":"थै","tho":"थो","thau":"ठौ","tham":"थं","thah":"थः",
+
+      "da":"द","daa":"दा","di":"दि","dee":"दी","du":"दु","doo":"दू",
+      "de":"दे","dai":"दै","do":"दो","dau":"दौ","dam":"दं","dah":"दः",
+
+      "dha":"ध","dhaa":"धा","dhi":"धि","dhee":"धी","dhu":"धु","dhoo":"धू",
+      "dhe":"धे","dhai":"धै","dho":"धो","dhau":"धौ","dham":"धं","dhah":"धः",
+
+      "na":"न","naa":"ना","ni":"नि","nee":"नी","nu":"नु","noo":"नू",
+      "ne":"ने","nai":"नै","no":"नो","nau":"नौ","nam":"नं","nah":"नः",
+
+      // retroflex versions via double consonant
       "tta":"ट","ttaa":"टा","tti":"टि","ttee":"टी","ttu":"टु","ttoo":"टू",
       "tte":"टे","ttai":"टै","tto":"टो","ttau":"टौ",
 
@@ -224,78 +227,51 @@
       "ddha":"ढ","ddhaa":"ढा","ddhi":"ढि","ddhee":"ढी","ddhu":"ढु","ddhoo":"ढू",
       "ddhe":"ढे","ddhai":"ढै","ddho":"ढो","ddhau":"ढौ",
 
-      // normal dental त, थ, द, ध
-      "ta":"त","taa":"ता","ti":"ति","tee":"ती","tu":"तु","too":"तू",
-      "te":"ते","tai":"तै","to":"तो","tau":"तौ","tam":"तं",
-
-      "tha":"थ","thaa":"था","thi":"थि","thee":"थी","thu":"थु","thoo":"थू",
-      "the":"थे","thai":"थै","tho":"थो","thau":"थौ",
-
-      "da":"द","daa":"दा","di":"दि","dee":"दी","du":"दु","doo":"दू",
-      "de":"दे","dai":"दै","do":"दो","dau":"दौ","dam":"दं",
-
-      "dha":"ध","dhaa":"धा","dhi":"धि","dhee":"धी","dhu":"धु","dhoo":"धू",
-      "dhe":"धे","dhai":"धै","dho":"धो","dhau":"धौ","dham":"धं",
-
-      // न (default dental) + retroflex by nn
-      "na":"न","naa":"ना","ni":"नि","nee":"नी","nu":"नु","noo":"नू",
-      "ne":"ने","nai":"नै","no":"नो","nau":"नौ","nam":"नं",
-
       "nna":"ण","nnaa":"णा","nni":"णि","nnee":"णी","nnu":"णु","nnoo":"णू",
       "nne":"णे","nnai":"णै","nno":"णो","nnau":"णौ","nnm":"णं",
 
-      // प
+      // प / फ / ब / भ / म
       "pa":"प","paa":"पा","pi":"पि","pee":"पी","pu":"पु","poo":"पू",
-      "pe":"पे","pai":"पै","po":"पो","pau":"पौ","pam":"पं",
+      "pe":"पे","pai":"पै","po":"पो","pau":"पौ","pam":"पं","pah":"पः",
 
-      // फ
       "fa":"फ","faa":"फा","fi":"फि","fee":"फी","fu":"फु","foo":"फू",
       "phe":"फे","phai":"फै","pho":"फो","phau":"फौ","pham":"फं",
 
       "pha":"फ","phaa":"फा","phi":"फि","phee":"फी","phu":"फु","phoo":"फू",
 
-      // ब
       "ba":"ब","baa":"बा","bi":"बि","bee":"बी","bu":"बु","boo":"बू",
-      "be":"बे","bai":"बै","bo":"बो","bau":"बौ","bam":"बं",
+      "be":"बे","bai":"बै","bo":"बो","bau":"बौ","bam":"बं","bah":"बः",
 
-      // भ
       "bha":"भ","bhaa":"भा","bhi":"भि","bhee":"भी","bhu":"भु","bhoo":"भू",
-      "bhe":"भे","bhai":"भै","bho":"भो","bhau":"भौ","bham":"भं",
+      "bhe":"भे","bhai":"भै","bho":"भो","bhau":"भौ","bham":"भं","bhah":"भः",
 
-      // म
       "ma":"म","maa":"मा","mi":"मि","mee":"मी","mu":"मु","moo":"मू",
-      "me":"मे","mai":"मै","mo":"मो","mau":"मौ","mam":"मं",
+      "me":"मे","mai":"मै","mo":"मो","mau":"मौ","mam":"मं","mah":"मः",
 
-      // य
+      // य / र / ल / व
       "ya":"य","yaa":"या","yi":"यि","yee":"यी","yu":"यु","yoo":"यू",
       "ye":"ये","yai":"यै","yo":"यो","yau":"यौ","yam":"यं",
 
-      // र
       "ra":"र","raa":"रा","ri":"रि","ree":"री","ru":"रु","roo":"रू",
       "re":"रे","rai":"रै","ro":"रो","rau":"रौ","ram":"रं",
 
-      // ल
       "la":"ल","laa":"ला","li":"लि","lee":"ली","lu":"लु","loo":"लू",
       "le":"ले","lai":"लै","lo":"लो","lau":"लौ","lam":"लं",
 
-      // व
       "va":"व","vaa":"वा","vi":"वि","vee":"वी","vu":"वु","voo":"वू",
       "ve":"वे","vai":"वै","vo":"वो","vau":"वौ","vam":"वं",
 
-      // स
+      // स / श / ष / ह
       "sa":"स","saa":"सा","si":"सि","see":"सी","su":"सु","soo":"सू",
       "se":"से","sai":"सै","so":"सो","sau":"सौ","sam":"सं",
 
-      // श
       "sha":"श","shaa":"शा","shi":"शि","shee":"शी","shu":"शु","shoo":"शू",
       "she":"शे","shai":"शै","sho":"शो","shau":"शौ","sham":"शं",
 
-      // ष (optional) via "ssha"
       "ssha":"ष","sshaa":"षा","sshi":"षि","sshee":"षी","sshu":"षु","sshoo":"षू",
 
-      // ह
       "ha":"ह","haa":"हा","hi":"हि","hee":"ही","hu":"हु","hoo":"हू",
-      "he":"हे","hai":"है","ho":"हो","hau":"हौ","ham":"हं",
+      "he":"हे","hai":"है","ho":"हो","hau":"हौ","ham":"हं","hah":"हः",
 
       // क्ष, त्र, ज्ञ
       "ksha":"क्ष","kshaa":"क्षा","kshi":"क्षि","kshee":"क्षी","kshu":"क्षु","kshoo":"क्षू",
@@ -313,14 +289,12 @@
       "e":"ए","ai":"ऐ","o":"ओ","au":"औ"
     };
 
-    // Suggestion dictionary
     const SUGGEST_WORDS = [
       "mera","bharat","mahan","hai",
-      "namaste","dhanyavaad","hindustan","rajasthan","sarkar","yojana",
-      "pariksha","adhikari","chhatra","adhyapak","samay","mahine","varsh"
+      "hindustan","rajasthan","sarkar","yojana",
+      "pariksha","adhikari","chhatra","adhyapak"
     ];
 
-    // longest-match token
     function matchToken(str, i){
       let maxLen = Math.min(5, str.length - i);
       for(let len = maxLen; len > 0; len--){
@@ -361,7 +335,7 @@
       document.getElementById("hindiOutput").value = result;
     }
 
-    // Suggestions logic
+    // suggestions
     let currentSuggestions = [];
     let activeIndex = -1;
 
@@ -449,7 +423,7 @@
         box.style.display = "none";
         return;
       }else{
-        return; // let normal typing happen
+        return;
       }
 
       items.forEach(el => el.classList.remove("active"));
