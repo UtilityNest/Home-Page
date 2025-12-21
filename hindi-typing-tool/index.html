@@ -296,36 +296,28 @@
 <div class="container">
   <div class="header">
     <h1>🇮🇳 Hindi Typing Tool</h1>
-    <p>Type in Hindi using Roman (English) Keyboard | Just like EasyHindiTyping.com</p>
+    <p>Type in Hindi using Roman (English) Keyboard | Like EasyHindiTyping.com</p>
   </div>
 
   <div class="main-content">
-    <!-- INPUT SECTION -->
     <div class="box">
-      <h2>
-        <span>📝</span>
-        Type in English (Roman)
-      </h2>
+      <h2><span>📝</span> Type in English (Roman)</h2>
       <div class="textarea-wrapper">
         <textarea 
           id="englishInput" 
-          placeholder="Type here: mera bharat mahan hai&#10;&#10;Press Backspace to see suggestions for each letter"
+          placeholder="Type: aap kaise hain&#10;mera bharat mahan hai"
           oninput="handleInput()"
           onkeydown="handleKeyboard(event)"></textarea>
         <div class="suggestions-box scrollbar-hidden" id="suggestionsBox"></div>
       </div>
-      <p class="hint-text">💡 Start typing... suggestions will appear for each letter. Press Backspace to see alternatives.</p>
+      <p class="hint-text">💡 Type English, it converts to Hindi. Press Backspace at word end to see letter options.</p>
     </div>
 
-    <!-- OUTPUT SECTION -->
     <div class="box">
-      <h2>
-        <span>🔤</span>
-        Hindi Output (देवनागरी)
-      </h2>
+      <h2><span>🔤</span> Hindi Output (देवनागरी)</h2>
       <textarea 
         id="hindiOutput" 
-        placeholder="यहाँ आपका हिंदी टेक्स्ट दिखाई देगा..."
+        placeholder="यहाँ हिंदी टेक्स्ट दिखेगा..."
         readonly></textarea>
       
       <div class="button-group">
@@ -333,52 +325,72 @@
         <button class="btn-secondary" onclick="downloadText()">⬇️ Download</button>
         <button class="btn-secondary" onclick="clearAll()">🗑️ Clear</button>
       </div>
-      <div class="success-message" id="successMsg">✓ Copied to clipboard!</div>
+      <div class="success-message" id="successMsg">✓ Copied!</div>
     </div>
   </div>
 
-  <!-- INFO SECTION -->
   <div class="info-box">
     <h2>📖 How to Use</h2>
-    <p><strong>Easy Hindi Typing:</strong> Just type in English and it automatically converts to Hindi!</p>
+    <p><strong>Just type English text and it converts to Hindi automatically!</strong></p>
     
     <p><strong>Examples:</strong></p>
     <ul>
       <li><span class="code-example">aap kaise hain</span> → आप कैसे हैं</li>
+      <li><span class="code-example">mera bharat mahan hai</span> → मेरा भारत महान है</li>
       <li><span class="code-example">namaste</span> → नमस्ते</li>
       <li><span class="code-example">dhanyavaad</span> → धन्यवाद</li>
-      <li><span class="code-example">mera bharat mahan hai</span> → मेरा भारत महान है</li>
       <li><span class="code-example">rajasthan</span> → राजस्थान</li>
     </ul>
 
-    <p><strong>Pro Tips:</strong></p>
+    <p><strong>Tips:</strong></p>
     <ul>
-      <li>Press <strong>Backspace</strong> after typing a letter to see alternative characters</li>
-      <li>Use arrow keys (↑↓) to navigate suggestions, press Enter to select</li>
-      <li>Common vowels: a, aa, i, ii, u, oo, e, ai, o, au</li>
-      <li>Type <strong>.</strong> (period/decimal) for । (danda) or <strong>CTRL+SHIFT+.</strong> for full stop</li>
+      <li>✓ Backspace works normally to delete</li>
+      <li>✓ Press Backspace at word end for letter options</li>
+      <li>✓ Use arrow keys (↑↓) to navigate suggestions</li>
+      <li>✓ Press Enter to select, Escape to close</li>
     </ul>
   </div>
 
   <div class="footer">
-    <p>💙 Made with love for Hindi content creators | No data is stored on server</p>
+    <p>💙 Made for Hindi content creators | No data stored</p>
   </div>
 </div>
 
 <script>
 const DEVANAGARI_MAP = {
-  'a': 'अ', 'aa': 'आ', 'i': 'इ', 'ii': 'ई', 'u': 'उ', 'uu': 'ऊ', 'oo': 'ऊ',
-  'ri': 'ऋ', 'rri': 'ऋ', 'e': 'ए', 'ae': 'ए', 'ai': 'ऐ', 'o': 'ओ', 'au': 'औ', 'ao': 'औ',
+  'aa': 'आ', 'ii': 'ई', 'uu': 'ऊ', 'oo': 'ऊ', 'ee': 'ई',
+  'a': 'अ', 'i': 'इ', 'u': 'उ', 
+  'e': 'ए', 'o': 'ओ',
+  'ai': 'ऐ', 'au': 'औ', 'ao': 'औ',
+  'ri': 'ऋ', 'rri': 'ऋ',
   'an': 'अं', 'am': 'अं', 'ah': 'अः',
-  'k': 'क', 'ka': 'क', 'kh': 'ख', 'g': 'ग', 'gh': 'घ', 'ng': 'ङ',
-  'ch': 'च', 'cha': 'च', 'chh': 'छ', 'j': 'ज', 'jh': 'झ', 'ny': 'ञ',
-  'tt': 'ट', 'th': 'ठ', 'dd': 'ड', 'd': 'ड', 'dh': 'ढ', 'ddh': 'ढ', 'nn': 'ण',
-  't': 'त', 'ta': 'त', 'tha': 'थ', 'da': 'द', 'dha': 'ध', 'n': 'न', 'na': 'न',
-  'p': 'प', 'pa': 'प', 'ph': 'फ', 'f': 'फ', 'b': 'ब', 'ba': 'ब', 'bh': 'भ',
-  'm': 'म', 'ma': 'म', 'y': 'य', 'ya': 'य', 'r': 'र', 'ra': 'र', 'l': 'ल', 'la': 'ल',
-  'v': 'व', 'va': 'व', 'w': 'व', 'wa': 'व',
-  'sh': 'श', 'sha': 'श', 's': 'स', 'sa': 'स', 'h': 'ह', 'ha': 'ह',
-  'ksh': 'क्ष', 'xa': 'क्ष', 'tr': 'त्र', 'gya': 'ज्ञ', 'jna': 'ज्ञ', 'shr': 'श्र',
+  
+  'kh': 'ख', 'gh': 'घ', 'ng': 'ङ',
+  'k': 'क', 'g': 'ग',
+  
+  'chh': 'छ', 'jh': 'झ', 'ny': 'ञ',
+  'ch': 'च', 'j': 'ज',
+  
+  'tt': 'ट', 'thh': 'ठ', 'ddh': 'ढ', 'nn': 'ण',
+  'dd': 'ड', 'dh': 'ढ', 'th': 'ठ',
+  
+  'ta': 'त', 'tha': 'थ', 'da': 'द', 'dha': 'ध', 'na': 'न',
+  't': 'त', 'd': 'ड', 'n': 'न',
+  
+  'ph': 'फ', 'f': 'फ', 'bh': 'भ',
+  'p': 'प', 'b': 'ब',
+  
+  'm': 'म', 'y': 'य', 'r': 'र', 'l': 'ल',
+  
+  'v': 'व', 'w': 'व', 'va': 'व', 'wa': 'व',
+  
+  'sh': 'श', 'ss': 'ष', 's': 'स', 'h': 'ह',
+  
+  'ksh': 'क्ष', 'xa': 'क्ष', 'tr': 'त्र', 'thr': 'त्र',
+  'gya': 'ज्ञ', 'jna': 'ज्ञ', 'gna': 'ज्ञ',
+  'shr': 'श्र', 'shree': 'श्री', 'shri': 'श्री',
+  'shn': 'श्न', 'sty': 'स्त्य', 'str': 'स्त्र',
+  
   '.': '।'
 };
 
@@ -416,15 +428,13 @@ const LETTER_ALTERNATIVES = {
     { dev: 'क', roman: 'k' },
     { dev: 'ख', roman: 'kh' },
     { dev: 'ग', roman: 'g' },
-    { dev: 'घ', roman: 'gh' },
-    { dev: 'ङ', roman: 'ng' }
+    { dev: 'घ', roman: 'gh' }
   ],
   'c': [
-    { dev: 'च', roman: 'ch/c' },
+    { dev: 'च', roman: 'ch' },
     { dev: 'छ', roman: 'chh' },
     { dev: 'ज', roman: 'j' },
-    { dev: 'झ', roman: 'jh' },
-    { dev: 'ञ', roman: 'ny' }
+    { dev: 'झ', roman: 'jh' }
   ],
   't': [
     { dev: 'त', roman: 't (dental)' },
@@ -500,6 +510,7 @@ let currentSuggestions = [];
 let activeIndex = -1;
 let lastBackspacedChar = '';
 let lastBackspacedPos = -1;
+let showingSuggestions = false;
 
 function transliterateText(text) {
   const words = text.toLowerCase().split(/(\s+)/);
@@ -516,7 +527,7 @@ function transliterateWord(word) {
   while (i < word.length) {
     let matched = false;
     
-    for (let len = Math.min(4, word.length - i); len > 0; len--) {
+    for (let len = Math.min(5, word.length - i); len > 0; len--) {
       const chunk = word.substr(i, len);
       if (DEVANAGARI_MAP[chunk]) {
         result += DEVANAGARI_MAP[chunk];
@@ -541,29 +552,42 @@ function handleInput() {
   const suggestionsBox = document.getElementById('suggestionsBox');
 
   hindi.value = transliterateText(english.value);
-  suggestionsBox.classList.remove('active');
+  
+  if (showingSuggestions) {
+    suggestionsBox.classList.remove('active');
+    showingSuggestions = false;
+  }
 }
 
 function handleKeyboard(event) {
   const suggestionsBox = document.getElementById('suggestionsBox');
+  const input = event.target;
   
   if (event.key === 'Backspace') {
-    const input = event.target;
     const pos = input.selectionStart;
     
     if (pos > 0) {
-      lastBackspacedChar = input.value[pos - 1].toLowerCase();
-      lastBackspacedPos = pos - 1;
-
-      if (LETTER_ALTERNATIVES[lastBackspacedChar]) {
+      const charBefore = input.value[pos - 1].toLowerCase();
+      const isEndOfWord = pos === input.value.length || /\s/.test(input.value[pos]);
+      
+      if (isEndOfWord && LETTER_ALTERNATIVES[charBefore]) {
         event.preventDefault();
-        showLetterAlternatives(lastBackspacedChar);
+        lastBackspacedChar = charBefore;
+        lastBackspacedPos = pos - 1;
+        showLetterAlternatives(charBefore);
+        showingSuggestions = true;
+        return;
       }
     }
+    
+    showingSuggestions = false;
+    setTimeout(() => {
+      handleInput();
+    }, 0);
     return;
   }
 
-  if (suggestionsBox.classList.contains('active')) {
+  if (showingSuggestions && suggestionsBox.classList.contains('active')) {
     const items = suggestionsBox.querySelectorAll('.suggestion-item');
     
     if (event.key === 'ArrowDown') {
@@ -581,6 +605,10 @@ function handleKeyboard(event) {
       }
     } else if (event.key === 'Escape') {
       event.preventDefault();
+      suggestionsBox.classList.remove('active');
+      showingSuggestions = false;
+    } else {
+      showingSuggestions = false;
       suggestionsBox.classList.remove('active');
     }
   }
@@ -622,6 +650,7 @@ function updateActiveSuggestion(items) {
   items.forEach(item => item.classList.remove('active'));
   if (activeIndex >= 0 && items[activeIndex]) {
     items[activeIndex].classList.add('active');
+    items[activeIndex].scrollIntoView({ block: 'nearest' });
   }
 }
 
@@ -638,6 +667,7 @@ function selectLetterAlternative(item) {
   handleInput();
   
   document.getElementById('suggestionsBox').classList.remove('active');
+  showingSuggestions = false;
 }
 
 function copyHindi() {
@@ -670,6 +700,7 @@ function clearAll() {
   document.getElementById('englishInput').value = '';
   document.getElementById('hindiOutput').value = '';
   document.getElementById('suggestionsBox').classList.remove('active');
+  showingSuggestions = false;
 }
 </script>
 
