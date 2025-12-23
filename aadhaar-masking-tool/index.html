@@ -5,112 +5,81 @@
   <title>Aadhaar Masking Tool – UtilityNest</title>
   <meta name="description" content="Free Aadhaar Masking Tool to hide first 8 digits and show only last 4 digits. Secure, instant and privacy-friendly Aadhaar masking online.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="/Home/">
 
-  <style>
-    body{margin:0;font-family:system-ui,Arial;background:#f6f7fb;color:#111}
-    a{text-decoration:none;color:#2563eb}
-    h1,h2,h3,h4{margin:0 0 10px}
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://utilitynest.github.io/Home/aadhaar-masking-tool/">
 
-    /* HEADER */
-    header{background:#111827;color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
-    header a{color:#fff;font-weight:600;margin-right:15px}
-
-    /* BREADCRUMB */
-    .breadcrumb{background:#eef2ff;padding:10px 20px;font-size:14px}
-    .breadcrumb a{color:#2563eb}
-
-    /* SECTION */
-    .section{max-width:800px;margin:auto;padding:40px 20px}
-    .card{background:#fff;border-radius:14px;padding:20px;box-shadow:0 5px 15px rgba(0,0,0,.08);margin-bottom:20px}
-
-    /* Gradient Card */
-    .gradient-card{background:linear-gradient(to bottom right,#fff5f5,#fff7ed);border:1px solid #fecaca}
-
-    /* Input */
-    input{width:100%;padding:12px;font-size:18px;font-family:monospace;border:2px solid #d1d5db;border-radius:8px}
-    input:focus{outline:none;border-color:#ef4444;box-shadow:0 0 0 2px #fecaca}
-
-    /* Buttons */
-    button{padding:12px 20px;font-size:16px;cursor:pointer;border:none;border-radius:8px;display:inline-flex;align-items:center;gap:8px}
-    .btn-primary{background:#ef4444;color:#fff;width:100%}
-    .btn-primary:hover{background:#dc2626}
-    .btn-outline{background:#fff;border:2px solid #d1d5db;color:#111;width:100%}
-    .btn-outline:hover{background:#f9fafb}
-    .btn-ghost{background:transparent;color:#111}
-
-    /* Result Box */
-    .masked-box{background:linear-gradient(to right,#fee2e2,#ffedd5);border:2px solid #fca5a5;border-radius:10px;padding:15px;margin-bottom:15px}
-    .masked-number{font-size:24px;font-weight:bold;font-family:monospace;color:#b91c1c}
-
-    /* Privacy Notice */
-    .notice{background:#fefce8;border:1px solid #fde68a;border-radius:10px;padding:15px;font-size:14px;color:#92400e}
-  </style>
+  <!-- GLOBAL CSS -->
+  <link rel="stylesheet" href="/Home/css/style.css">
 </head>
 <body>
 
-<header>
-  <a href="">UtilityNest</a>
-  <nav>
-    <a href="government-tools/">Government</a>
-    <a href="finance-calculators/">Finance</a>
-    <a href="student-tools/">Student</a>
-    <a href="utility-tools/">Utility</a>
-    <a href="hindi-tools/">Hindi</a>
-  </nav>
-</header>
+<!-- GLOBAL HEADER -->
+<div id="site-header"></div>
 
+<!-- BREADCRUMB -->
 <nav class="breadcrumb">
-  <a href="">Home</a> › <strong>Government Tools</strong> › Aadhaar Masking Tool
+  <a href="/Home/">Home</a> ›
+  <a href="/Home/government-tools/">Government Tools</a> ›
+  <strong>Aadhaar Masking Tool</strong>
 </nav>
 
-<section class="section">
+<section class="section section-small">
   <h1>Aadhaar Masking Tool</h1>
-  <p>Mask your Aadhaar number securely by hiding the first 8 digits and showing only the last 4 digits. This helps protect your privacy while sharing documents.</p>
+  <p>
+    Mask your Aadhaar number securely by hiding the first 8 digits and showing only the last 4 digits.
+    This helps protect your privacy while sharing documents.
+  </p>
 
+  <!-- INPUT CARD -->
   <div class="card gradient-card">
     <h2>Aadhaar Number Masking</h2>
-    <label>Enter Aadhaar Number</label>
-    <input type="text" id="aadhaarInput" placeholder="XXXX XXXX XXXX" maxlength="14">
-    <p id="errorMsg" style="color:red;font-size:14px;margin-top:5px;"></p>
-    <button class="btn-primary" onclick="maskAadhaar()">🔒 Mask Aadhaar Number</button>
+
+    <label for="aadhaarInput">Enter Aadhaar Number</label>
+    <input
+      type="text"
+      id="aadhaarInput"
+      placeholder="XXXX XXXX XXXX"
+      maxlength="14"
+      inputmode="numeric"
+    >
+
+    <p id="errorMsg" class="error-text"></p>
+
+    <button class="btn-primary" onclick="maskAadhaar()">
+      🔒 Mask Aadhaar Number
+    </button>
   </div>
 
+  <!-- RESULT -->
   <div id="resultBox" class="card" style="display:none;">
     <h3>Masked Aadhaar Number</h3>
+
     <div class="masked-box">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <span class="text-sm">Masked Number:</span>
+      <div class="masked-header">
+        <span>Masked Number:</span>
         <button class="btn-ghost" onclick="toggleView()">👁 Show / Hide</button>
       </div>
       <p class="masked-number" id="maskedNumber"></p>
     </div>
+
     <button class="btn-outline" onclick="copyMasked()">📋 Copy Masked Number</button>
+
     <div class="notice">
-      <strong>Privacy Notice:</strong> Use masked Aadhaar when sharing documents. Only the last 4 digits are visible, protecting your privacy while allowing verification.
+      <strong>Privacy Notice:</strong>
+      Always use masked Aadhaar while sharing documents. Only the last 4 digits are visible,
+      ensuring privacy and compliance.
     </div>
   </div>
 </section>
 
-<footer>
-  <div class="footer-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:30px 20px;background:#111827;color:#d1d5db;">
-    <div>
-      <h3>Categories</h3>
-      <a href="government-tools/">Government</a>
-      <a href="finance-calculators/">Finance</a>
-      <a href="student-tools/">Student</a>
-      <a href="utility-tools/">Utility</a>
-      <a href="hindi-tools/">Hindi</a>
-    </div>
-    <div>
-      <h3>Popular Tools</h3>
-      <a href="age-calculator/">Age Calculator</a>
-      <a href="emi-calculator/">EMI Calculator</a>
-    </div>
-  </div>
-  <p class="copy" style="text-align:center;margin-top:20px;font-size:14px;color:#9ca3af;">© 2025 UtilityNest</p>
-</footer>
+<!-- GLOBAL FOOTER -->
+<div id="site-footer"></div>
 
+<!-- GLOBAL JS -->
+<script src="/Home/js/common.js"></script>
+
+<!-- TOOL JS -->
 <script>
 let originalAadhaar = "";
 let maskedAadhaar = "";
@@ -144,17 +113,14 @@ function maskAadhaar() {
 
 function toggleView() {
   const display = document.getElementById('maskedNumber');
-  if (isShowingOriginal) {
-    display.textContent = maskedAadhaar;
-  } else {
-    display.textContent = originalAadhaar;
-  }
+  display.textContent = isShowingOriginal ? maskedAadhaar : originalAadhaar;
   isShowingOriginal = !isShowingOriginal;
 }
 
 function copyMasked() {
-  const text = document.getElementById('maskedNumber').textContent;
-  navigator.clipboard.writeText(text);
+  navigator.clipboard.writeText(
+    document.getElementById('maskedNumber').textContent
+  );
   alert("Masked Aadhaar number copied!");
 }
 </script>
