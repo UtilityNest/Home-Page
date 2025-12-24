@@ -1,63 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Retirement Date Calculator (India)</title>
-<style>
-body{font-family:Arial, sans-serif;background:#f6f7fb;padding:20px}
-.box{max-width:420px;margin:auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,.1)}
-h2{text-align:center}
-label{font-weight:600;margin-top:10px;display:block}
-input,select,button{width:100%;padding:10px;margin-top:5px}
-button{background:#4f46e5;color:#fff;border:none;border-radius:5px;cursor:pointer}
-.result{margin-top:15px;font-weight:700;text-align:center}
-</style>
+  <meta charset="UTF-8">
+  <title>Retirement Date Calculator (India)</title>
+
+  <meta name="description" content="Free Retirement Date Calculator for India. Calculate your exact retirement date based on date of birth and retirement age.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://utilitynest.github.io/Home/retirement-date-calculator/">
+
+  <!-- GLOBAL CSS -->
+  <link rel="stylesheet" href="/Home/css/style.css">
 </head>
 <body>
 
+<!-- GLOBAL HEADER -->
+<div id="site-header"></div>
 
-<div class="box">
-<h2>Retirement Date Calculator</h2>
+<!-- BREADCRUMB -->
+<nav class="breadcrumb">
+  <a href="/Home/">Home</a> ›
+  <a href="/Home/government-tools/">Government Tools</a> ›
+  <strong>Retirement Date Calculator</strong>
+</nav>
 
+<!-- TOOL SECTION -->
+<section class="section section-small">
+  <h1>Retirement Date Calculator</h1>
+  <p>Find your official retirement date based on your date of birth and applicable retirement age.</p>
 
-<label>Date of Birth</label>
-<input type="date" id="dob">
+  <div class="card">
+    <label for="dob">Date of Birth</label>
+    <input type="date" id="dob">
 
+    <label for="age">Retirement Age</label>
+    <select id="age">
+      <option value="60">60 Years</option>
+      <option value="58">58 Years</option>
+    </select>
 
-<label>Retirement Age</label>
-<select id="age">
-<option value="60">60 Years</option>
-<option value="58">58 Years</option>
-</select>
+    <button class="btn-primary" onclick="calcRetirement()">Calculate Retirement Date</button>
 
+    <div class="result-text" id="res"></div>
+  </div>
+</section>
 
-<button onclick="calc()">Calculate</button>
+<!-- EXPLORE MORE -->
+<section class="section">
+  <h2>Explore More Tools</h2>
 
+  <div class="grid small-grid">
+    <a class="card link-card" href="/Home/government-tools/">🏛 Government Tools</a>
+    <a class="card link-card" href="/Home/finance-calculators/">💰 Finance Calculators</a>
+    <a class="card link-card" href="/Home/student-tools/">🎓 Student Tools</a>
+    <a class="card link-card" href="/Home/utility-tools/">🛠 Utility Tools</a>
+    <a class="card link-card" href="/Home/hindi-tools/">🇮🇳 Hindi Tools</a>
+  </div>
+</section>
 
-<div class="result" id="res"></div>
-</div>
+<!-- GLOBAL FOOTER -->
+<div id="site-footer"></div>
 
+<!-- GLOBAL JS -->
+<script src="/Home/js/common.js"></script>
 
+<!-- TOOL JS -->
 <script>
-function calc(){
-let dob = new Date(document.getElementById('dob').value);
-let age = parseInt(document.getElementById('age').value);
-if(!dob){alert('Select DOB');return}
+function calcRetirement() {
+  const dobVal = document.getElementById('dob').value;
+  const age = parseInt(document.getElementById('age').value);
+  const res = document.getElementById('res');
 
+  if (!dobVal) {
+    alert('Please select Date of Birth');
+    return;
+  }
 
-let retireYear = dob.getFullYear() + age;
-let retireMonth = dob.getMonth();
+  const dob = new Date(dobVal);
+  const retireYear = dob.getFullYear() + age;
+  const retireMonth = dob.getMonth();
 
+  // Last day of retirement month
+  const lastDay = new Date(retireYear, retireMonth + 1, 0);
 
-let lastDay = new Date(retireYear, retireMonth + 1, 0);
-
-
-document.getElementById('res').innerHTML =
-'Retirement Date:<br>' + lastDay.toDateString();
+  res.innerHTML = `
+    <strong>Retirement Date:</strong><br>
+    ${lastDay.toDateString()}
+  `;
 }
 </script>
-
 
 </body>
 </html>
