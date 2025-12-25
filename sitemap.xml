@@ -64,5 +64,20 @@
   <changefreq>yearly</changefreq>
 </url>
 
+   <url>
+  <loc>https://utilitynest.github.io/Home/finance-calculators-guide/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+
+   <url>
+  <loc>https://utilitynest.github.io/Home/government-calculators-guide/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+
+   <url>
+  <loc>https://utilitynest.github.io/Home/hindi-tools-guide/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+
 
 </urlset>
